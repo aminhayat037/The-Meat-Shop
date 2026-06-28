@@ -1,6 +1,4 @@
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 .announcement-bar {
   background: #c9a24e;
@@ -10,19 +8,6 @@ html {
   font-weight: bold;
   position: sticky;
   top: 0;
-  z-index: 2000;
-}
-
-.order-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #25D366;
-  color: white;
-  padding: 15px;
-  border-radius: 50px;
-  text-decoration: none;
-  font-weight: bold;
   z-index: 2000;
 }
 
@@ -55,11 +40,6 @@ html {
   background: rgba(0,0,0,0.6);
   padding: 50px;
   border: 1px solid #c9a24e;
-}
-
-.hero h1 {
-  font-size: 60px;
-  color: #c9a24e;
 }
 
 .section {
