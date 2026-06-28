@@ -9,12 +9,12 @@
 
 <body>
 
-<!-- STICKY BAR -->
+<!-- ANNOUNCEMENT BAR -->
 <div class="announcement-bar">
   🚚 Free delivery within 2 miles • 100% Halal Premium Meat • Order on WhatsApp
 </div>
 
-<!-- ORDER BUTTON -->
+<!-- WHATSAPP BUTTON -->
 <a class="order-btn" href="https://wa.me/44XXXXXXXXXX" target="_blank">
   Order Now
 </a>
@@ -25,6 +25,7 @@
   <a href="#about">About</a>
   <a href="#products">Products</a>
   <a href="#findus">Find Us</a>
+  <a href="#delivery">Delivery</a>
 </nav>
 
 <!-- HERO -->
@@ -67,6 +68,7 @@
 <!-- CLICK & COLLECT -->
 <section class="section dark">
   <h2>Order Type</h2>
+
   <select style="padding:10px; font-size:16px;">
     <option>Delivery</option>
     <option>Click & Collect</option>
@@ -87,7 +89,23 @@
   </iframe>
 </section>
 
-<!-- CONTACT FORM -->
+<!-- DELIVERY CHECKER -->
+<section class="section dark" id="delivery">
+  <h2>Check Delivery</h2>
+
+  <p>Enter your postcode to see if we deliver (2 mile zone)</p>
+
+  <input id="postcode" placeholder="Enter postcode"
+    style="padding:10px; width:60%; max-width:300px;">
+
+  <br><br>
+
+  <button class="btn" onclick="checkDelivery()">Check</button>
+
+  <p id="result" style="margin-top:20px; font-weight:bold;"></p>
+</section>
+
+<!-- CONTACT -->
 <section class="section">
   <h2>Contact Us</h2>
 
@@ -103,6 +121,26 @@
 <footer>
   <p>© 2026 The Meat Shop</p>
 </footer>
+
+<!-- DELIVERY SCRIPT -->
+<script>
+function checkDelivery() {
+  const input = document.getElementById("postcode").value.toLowerCase();
+  const result = document.getElementById("result");
+
+  const allowedAreas = ["e20", "e15", "e10", "e9"];
+
+  const match = allowedAreas.some(area => input.includes(area));
+
+  if (match) {
+    result.innerHTML = "✅ Great news! We deliver to your area.";
+    result.style.color = "lightgreen";
+  } else {
+    result.innerHTML = "❌ Sorry, you are outside our delivery zone.";
+    result.style.color = "red";
+  }
+}
+</script>
 
 </body>
 </html>
