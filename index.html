@@ -9,24 +9,25 @@
 
 <body>
 
-  <!-- NAVIGATION -->
+  <!-- NAV -->
   <nav class="nav">
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="findus.html">Find Us</a>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#products">Products</a>
+    <a href="#findus">Find Us</a>
   </nav>
 
-  <!-- HERO SECTION -->
-  <section class="hero">
+  <!-- HERO -->
+  <section class="hero" id="home">
     <div class="overlay">
       <h1>The Meat Shop</h1>
       <p>Premium Halal Butcher • Fresh • Local • Trusted</p>
-      <a href="#products" class="btn">View Products</a>
+      <a href="#products" class="btn">Explore Products</a>
     </div>
   </section>
 
-  <!-- ABOUT PREVIEW -->
-  <section class="section">
+  <!-- ABOUT -->
+  <section class="section" id="about">
     <h2>About Us</h2>
     <p>
       We are an independent 100% halal butcher providing premium quality meats,
@@ -46,11 +47,20 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="section">
-    <h2>Contact</h2>
+  <!-- FIND US -->
+  <section class="section" id="findus">
+    <h2>Find Us</h2>
     <p>Unit 5.1 Celebration Avenue, E20 1DB</p>
-    <p>Call us: 0XXXXXXXXXX</p>
+
+    <div style="margin-top:30px;">
+      <iframe
+        src="https://www.google.com/maps?q=Unit+5.1+Celebration+Avenue+E20+1DB&output=embed"
+        width="100%"
+        height="350"
+        style="border:0;"
+        loading="lazy">
+      </iframe>
+    </div>
   </section>
 
   <!-- FOOTER -->
@@ -60,6 +70,3 @@
 
 </body>
 </html>
-
-
-
