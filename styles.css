@@ -1,24 +1,10 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
 html {
   scroll-behavior: smooth;
 }
 
-body {
-  background: #0b0b0b;
-  color: #fff;
-  padding-top: 50px;
-}
-
-/* ANNOUNCEMENT BAR */
 .announcement-bar {
   background: #c9a24e;
-  color: #000;
+  color: black;
   text-align: center;
   padding: 10px;
   font-weight: bold;
@@ -27,7 +13,6 @@ body {
   z-index: 2000;
 }
 
-/* ORDER BUTTON */
 .order-btn {
   position: fixed;
   bottom: 20px;
@@ -41,7 +26,6 @@ body {
   z-index: 2000;
 }
 
-/* NAV */
 .nav {
   position: fixed;
   top: 40px;
@@ -49,7 +33,6 @@ body {
   background: rgba(0,0,0,0.9);
   text-align: center;
   padding: 10px;
-  z-index: 1000;
 }
 
 .nav a {
@@ -59,10 +42,9 @@ body {
   font-weight: bold;
 }
 
-/* HERO */
 .hero {
   height: 100vh;
-  background: url('https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+  background: url('https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=1400&q=80') center/cover;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,27 +62,19 @@ body {
   color: #c9a24e;
 }
 
-/* SECTIONS */
 .section {
   padding: 80px 20px;
   text-align: center;
-}
-
-.section h2 {
-  color: #c9a24e;
-  margin-bottom: 20px;
 }
 
 .dark {
   background: #111;
 }
 
-/* PRODUCTS */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
-  margin-top: 30px;
 }
 
 .card {
@@ -109,21 +83,18 @@ body {
   border: 1px solid #333;
 }
 
-/* BUTTON */
 .btn {
-  margin-top: 20px;
   padding: 10px 20px;
   background: #c9a24e;
   border: none;
-  color: black;
   font-weight: bold;
   cursor: pointer;
 }
 
-/* FOOTER */
 footer {
   text-align: center;
   padding: 20px;
   background: black;
   color: #777;
 }
+
