@@ -5,118 +5,206 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Meat Shop East Village</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
-html {
-  scroll-behavior: smooth;
-  font-family: Arial, sans-serif;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
 }
 
-body {
-  margin: 0;
-  background: #f7f6f2;
-  color: #222;
+html{scroll-behavior:smooth}
+
+body{
+  background:#f6f5f1;
+  color:#1f1f1f;
 }
 
 /* NAV */
-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: white;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  padding: 15px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  z-index: 1000;
+nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:22px;
+  padding:15px;
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(12px);
+  z-index:1000;
+  border-bottom:1px solid rgba(0,0,0,0.05);
 }
 
-nav a {
-  text-decoration: none;
-  color: #234034;
-  font-weight: bold;
+nav a{
+  text-decoration:none;
+  color:#1f3d2a;
+  font-weight:500;
+  font-size:14px;
 }
 
 /* HERO */
-.hero {
-  height: 100vh;
-  background: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),
+.hero{
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:white;
+  background:
+  linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),
   url('https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=1800&q=80');
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  padding: 20px;
+  background-size:cover;
+  background-position:center;
 }
 
-.hero h1 {
-  font-size: 50px;
+.hero h1{
+  font-size:54px;
+  font-weight:600;
+  letter-spacing:-1px;
 }
 
-.hero button {
-  margin-top: 20px;
-  padding: 12px 20px;
-  border: none;
-  background: #234034;
-  color: white;
-  cursor: pointer;
+.hero button{
+  margin-top:20px;
+  padding:12px 22px;
+  border:none;
+  background:#1f3d2a;
+  color:white;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.hero button:hover{
+  transform:translateY(-2px);
 }
 
 /* SECTIONS */
-section {
-  padding: 80px 20px;
-  max-width: 1000px;
-  margin: auto;
+section{
+  padding:110px 20px;
+  max-width:1100px;
+  margin:auto;
+  opacity:0;
+  transform:translateY(20px);
+  animation:fadeIn 0.8s forwards;
 }
+
+@keyframes fadeIn{
+  to{opacity:1;transform:translateY(0);}
+}
+
+h2{margin-bottom:18px;font-size:28px}
 
 /* PRODUCTS */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
-  gap: 15px;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
 }
 
-.card {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+.card{
+  background:white;
+  padding:20px;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+  transition:0.3s;
 }
 
-.card button {
-  margin-top: 10px;
-  background: #234034;
-  color: white;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
+.card:hover{
+  transform:translateY(-5px);
 }
 
-/* CART */
-.cart {
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 300px;
-  height: 100%;
-  background: white;
-  box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-  padding: 20px;
-  overflow-y: auto;
+.card button{
+  margin-top:12px;
+  width:100%;
+  padding:10px;
+  border:none;
+  background:#1f3d2a;
+  color:white;
+  border-radius:8px;
+  cursor:pointer;
 }
 
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0;
+/* CART DRAWER */
+.overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.3);
+  display:none;
 }
 
-.small {
-  font-size: 14px;
-  color: gray;
+.cart{
+  position:fixed;
+  right:-400px;
+  top:0;
+  width:350px;
+  height:100%;
+  background:white;
+  padding:20px;
+  box-shadow:-15px 0 40px rgba(0,0,0,0.1);
+  transition:0.3s;
+  z-index:2000;
+}
+
+.cart.open{
+  right:0;
+}
+
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  margin:10px 0;
+  font-size:14px;
+}
+
+.remove{
+  background:#c0392b;
+  border:none;
+  color:white;
+  padding:4px 8px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* CHECKOUT SCREEN */
+.checkout{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:white;
+  display:none;
+  padding:50px;
+  z-index:3000;
+}
+
+/* MOBILE ORDER BAR */
+.mobile-bar{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:white;
+  display:none;
+  justify-content:space-between;
+  padding:12px 15px;
+  box-shadow:0 -5px 20px rgba(0,0,0,0.1);
+}
+
+.mobile-bar button{
+  background:#1f3d2a;
+  color:white;
+  border:none;
+  padding:10px;
+  border-radius:8px;
+}
+@media(max-width:768px){
+  .mobile-bar{display:flex;}
 }
 </style>
 </head>
@@ -129,73 +217,141 @@ section {
   <a href="#products">Products</a>
   <a href="#delivery">Delivery</a>
   <a href="#findus">Find Us</a>
+  <a onclick="openCart()">Cart 🛒</a>
 </nav>
 
+<!-- HERO -->
 <div class="hero" id="home">
   <div>
     <h1>The Meat Shop East Village</h1>
-    <p>Premium Halal Butcher</p>
-    <button onclick="document.getElementById('products').scrollIntoView()">Shop Now</button>
+    <button onclick="document.getElementById('products').scrollIntoView()">
+      Shop Now
+    </button>
   </div>
 </div>
 
+<!-- ABOUT -->
 <section id="about">
   <h2>About Us</h2>
-  <p>
-  At “The Meat Shop” East village we are an independent run butcher committed to providing our customers with the highest quality 100% Halal meats. We take pride in sourcing fresh, premium quality products and preparing every cut with care and attention.
-  </p>
+  <p>Premium halal butcher providing high-quality fresh meat in East Village.</p>
 </section>
 
+<!-- PRODUCTS -->
 <section id="products">
   <h2>Products (Coming Soon)</h2>
 
   <div class="grid">
     <div class="card">
       <h3>Beef</h3>
-      <p class="small">Coming soon</p>
-      <button>Add to Cart</button>
+      <button onclick="addToCart('Beef',10)">Add £10</button>
     </div>
 
     <div class="card">
       <h3>Chicken</h3>
-      <p class="small">Coming soon</p>
-      <button>Add to Cart</button>
+      <button onclick="addToCart('Chicken',8)">Add £8</button>
     </div>
   </div>
 </section>
 
+<!-- DELIVERY -->
 <section id="delivery">
   <h2>Delivery Checker</h2>
-  <p>We deliver within 2 miles of our shop.</p>
-  <input placeholder="Enter postcode">
-  <button>Check</button>
+  <input id="postcode" placeholder="Enter postcode">
+  <button onclick="checkDelivery()" class="card button">Check</button>
+  <p id="deliveryResult"></p>
 </section>
 
+<!-- FIND US -->
 <section id="findus">
   <h2>Find Us</h2>
-  <p>Unit 5.1 Celebration Avenue, E20 1DB</p>
-
-  <iframe
-    width="100%"
-    height="300"
-    src="https://www.google.com/maps?q=E20+1DB&output=embed">
-  </iframe>
+  <iframe width="100%" height="300"
+    src="https://www.google.com/maps?q=E20+1DB&output=embed"></iframe>
 </section>
 
-<section>
-  <h2>Social</h2>
-  <p>Instagram | TikTok | Facebook (coming soon)</p>
-</section>
+<!-- CART OVERLAY -->
+<div class="overlay" id="overlay" onclick="toggleCart()"></div>
 
-<section>
-  <h2>Contact</h2>
-  <p>Contact form coming soon</p>
-</section>
-
-<div class="cart">
-  <h3>Your Cart</h3>
-  <p class="small">Cart system coming next step</p>
+<div class="cart" id="cart">
+  <h2>Your Cart</h2>
+  <div id="cartItems"></div>
+  <h3>Total: £<span id="total">0</span></h3>
+  <button onclick="goCheckout()">Checkout</button>
 </div>
+
+<!-- CHECKOUT -->
+<div class="checkout" id="checkout">
+  <h1>Checkout</h1>
+  <p>Payment system will be added later (Stripe stage)</p>
+  <button onclick="closeCheckout()">Close</button>
+</div>
+
+<!-- MOBILE BAR -->
+<div class="mobile-bar">
+  <span id="mobTotal">£0</span>
+  <button onclick="openCart()">View Cart</button>
+</div>
+
+<script>
+let cart=[];
+
+function addToCart(n,p){
+  cart.push({n,p});
+  update();
+}
+
+function update(){
+  let box=document.getElementById("cartItems");
+  let total=0;
+
+  box.innerHTML="";
+
+  cart.forEach((i,idx)=>{
+    total+=i.p;
+
+    box.innerHTML+=`
+      <div class="cart-item">
+        ${i.n} £${i.p}
+        <button class="remove" onclick="remove(${idx})">X</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("total").innerText=total;
+  document.getElementById("mobTotal").innerText="£"+total;
+}
+
+function remove(i){
+  cart.splice(i,1);
+  update();
+}
+
+function openCart(){
+  document.getElementById("cart").classList.add("open");
+  document.getElementById("overlay").style.display="block";
+}
+
+function toggleCart(){
+  document.getElementById("cart").classList.remove("open");
+  document.getElementById("overlay").style.display="none";
+}
+
+function goCheckout(){
+  document.getElementById("checkout").style.display="block";
+}
+
+function closeCheckout(){
+  document.getElementById("checkout").style.display="none";
+}
+
+function checkDelivery(){
+  let p=document.getElementById("postcode").value.toLowerCase();
+  let zones=["e20","e15","e10","e9"];
+
+  document.getElementById("deliveryResult").innerText=
+    zones.some(z=>p.includes(z))
+    ?"We deliver to you":"Outside delivery area";
+}
+</script>
 
 </body>
 </html>
