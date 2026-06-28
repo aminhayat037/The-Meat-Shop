@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Meat Shop</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Meat Shop</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -14,18 +14,12 @@
   🚚 Free delivery within 2 miles • 100% Halal Premium Meat • Fresh Daily
 </div>
 
-<!-- FLOATING ORDER BUTTON -->
-<a class="order-btn" href="#cart">
-  View Cart
-</a>
-
 <!-- NAV -->
 <nav class="nav">
   <a href="#home">Home</a>
-  <a href="#about">About</a>
   <a href="#products">Shop</a>
-  <a href="#cart">Cart</a>
-  <a href="#findus">Find Us</a>
+  <a href="#delivery">Delivery</a>
+  <a onclick="openCart()">Cart 🛒 (<span id="cartCount">0</span>)</a>
 </nav>
 
 <!-- HERO -->
@@ -37,22 +31,6 @@
   </div>
 </section>
 
-<!-- ABOUT -->
-<section class="section" id="about">
-  <h2>About Us</h2>
-  <p>
-    We are an independent 100% halal butcher providing high-quality fresh meat,
-    sourced daily for our community.
-  </p>
-</section>
-
-<!-- OPENING HOURS -->
-<section class="section dark">
-  <h2>Opening Hours</h2>
-  <p>Mon - Sat: 8:00am - 7:00pm</p>
-  <p>Sunday: 9:00am - 4:00pm</p>
-</section>
-
 <!-- PRODUCTS -->
 <section class="section" id="products">
   <h2>Our Products</h2>
@@ -62,129 +40,121 @@
     <div class="card">
       <h3>Beef Cuts</h3>
       <p>£12.99</p>
-      <button class="btn" onclick="addToCart('Beef Cuts', 12.99)">Add to Cart</button>
+      <button class="btn" onclick="addToCart('Beef Cuts',12.99)">Add to Cart</button>
     </div>
 
     <div class="card">
       <h3>Chicken Selection</h3>
       <p>£8.99</p>
-      <button class="btn" onclick="addToCart('Chicken Selection', 8.99)">Add to Cart</button>
+      <button class="btn" onclick="addToCart('Chicken Selection',8.99)">Add to Cart</button>
     </div>
 
     <div class="card">
       <h3>Lamb Range</h3>
       <p>£14.99</p>
-      <button class="btn" onclick="addToCart('Lamb Range', 14.99)">Add to Cart</button>
+      <button class="btn" onclick="addToCart('Lamb Range',14.99)">Add to Cart</button>
     </div>
 
     <div class="card">
       <h3>Marinated Meats</h3>
       <p>£10.99</p>
-      <button class="btn" onclick="addToCart('Marinated Meats', 10.99)">Add to Cart</button>
+      <button class="btn" onclick="addToCart('Marinated Meats',10.99)">Add to Cart</button>
     </div>
 
   </div>
 </section>
 
-<!-- CLICK & COLLECT -->
-<section class="section dark">
-  <h2>Order Type</h2>
-  <select style="padding:10px; font-size:16px;">
-    <option>Delivery</option>
-    <option>Click & Collect</option>
-  </select>
+<!-- DELIVERY CHECKER -->
+<section class="section dark" id="delivery">
+  <h2>Check Delivery</h2>
+
+  <input id="postcode" placeholder="Enter postcode"
+    style="padding:10px; width:250px;">
+
+  <br><br>
+
+  <button class="btn" onclick="checkDelivery()">Check</button>
+
+  <p id="deliveryResult"></p>
 </section>
 
-<!-- FIND US -->
-<section class="section" id="findus">
-  <h2>Find Us</h2>
-  <p>Unit 5.1 Celebration Avenue, E20 1DB</p>
+<!-- CART DRAWER -->
+<div id="overlay" class="overlay-bg" onclick="closeCart()"></div>
 
-  <iframe
-    src="https://www.google.com/maps?q=E20+1DB&output=embed"
-    width="100%"
-    height="350"
-    style="border:0; margin-top:20px;">
-  </iframe>
-</section>
+<div id="cart" class="cart">
 
-<!-- CART -->
-<section class="section dark" id="cart">
   <h2>Your Cart</h2>
 
-  <div id="cart-items"></div>
+  <div id="cartItems"></div>
 
   <h3>Total: £<span id="total">0.00</span></h3>
 
-  <button class="btn" onclick="checkout()">Place Order</button>
+  <button class="btn">Checkout</button>
 
-  <p id="order-msg"></p>
-</section>
-
-<!-- CONTACT -->
-<section class="section">
-  <h2>Contact Us</h2>
-
-  <form>
-    <input placeholder="Name" style="padding:10px; width:80%; margin:10px;"><br>
-    <input placeholder="Phone" style="padding:10px; width:80%; margin:10px;"><br>
-    <textarea placeholder="Message" style="padding:10px; width:80%; height:100px;"></textarea><br>
-    <button class="btn">Send</button>
-  </form>
-</section>
+</div>
 
 <!-- FOOTER -->
 <footer>
   <p>© 2026 The Meat Shop</p>
 </footer>
 
-<!-- JS CART SYSTEM -->
+<!-- SCRIPT -->
 <script>
 let cart = [];
 
-function addToCart(name, price) {
-  cart.push({ name, price });
-  renderCart();
+function addToCart(name, price){
+  cart.push({name, price});
+  updateCart();
+  openCart();
 }
 
-function renderCart() {
-  const container = document.getElementById("cart-items");
-  const totalEl = document.getElementById("total");
-
-  container.innerHTML = "";
-
+function updateCart(){
+  let items = document.getElementById("cartItems");
   let total = 0;
 
-  cart.forEach((item, index) => {
+  items.innerHTML = "";
+
+  cart.forEach((item, i)=>{
     total += item.price;
 
-    container.innerHTML += `
-      <p>
-        ${item.name} - £${item.price.toFixed(2)}
-        <button onclick="removeItem(${index})">Remove</button>
-      </p>
+    items.innerHTML += `
+      <div style="display:flex;justify-content:space-between;margin:10px 0;">
+        <span>${item.name} - £${item.price}</span>
+        <button onclick="removeItem(${i})">X</button>
+      </div>
     `;
   });
 
-  totalEl.innerText = total.toFixed(2);
+  document.getElementById("total").innerText = total.toFixed(2);
+  document.getElementById("cartCount").innerText = cart.length;
 }
 
-function removeItem(index) {
-  cart.splice(index, 1);
-  renderCart();
+function removeItem(i){
+  cart.splice(i,1);
+  updateCart();
 }
 
-function checkout() {
-  const msg = document.getElementById("order-msg");
+function openCart(){
+  document.getElementById("cart").style.right = "0";
+  document.getElementById("overlay").style.display = "block";
+}
 
-  if (cart.length === 0) {
-    msg.innerHTML = "Your cart is empty";
-    return;
-  }
+function closeCart(){
+  document.getElementById("cart").style.right = "-400px";
+  document.getElementById("overlay").style.display = "none";
+}
 
-  msg.innerHTML = "Order placed successfully (demo checkout)";
-  cart = [];
-  renderCart();
+function checkDelivery(){
+  let input = document.getElementById("postcode").value.toLowerCase();
+  let result = document.getElementById("deliveryResult");
+
+  let zones = ["e20","e15","e10","e9"];
+
+  let ok = zones.some(z => input.includes(z));
+
+  result.innerHTML = ok
+    ? "✅ We deliver to you"
+    : "❌ Outside delivery zone";
 }
 </script>
 
