@@ -5,9 +5,58 @@
   font-family: Arial, sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: #0b0b0b;
   color: #fff;
+  padding-top: 50px;
+}
+
+/* ANNOUNCEMENT BAR */
+.announcement-bar {
+  background: #c9a24e;
+  color: #000;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+}
+
+/* ORDER BUTTON */
+.order-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25D366;
+  color: white;
+  padding: 15px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 2000;
+}
+
+/* NAV */
+.nav {
+  position: fixed;
+  top: 40px;
+  width: 100%;
+  background: rgba(0,0,0,0.9);
+  text-align: center;
+  padding: 10px;
+  z-index: 1000;
+}
+
+.nav a {
+  color: #c9a24e;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 /* HERO */
@@ -18,205 +67,63 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  position: relative;
 }
 
 .overlay {
-  background: rgba(0,0,0,0.65);
+  background: rgba(0,0,0,0.6);
   padding: 50px;
   border: 1px solid #c9a24e;
 }
 
 .hero h1 {
-  font-size: 64px;
+  font-size: 60px;
   color: #c9a24e;
-  letter-spacing: 2px;
-}
-
-.hero p {
-  margin-top: 10px;
-  color: #ddd;
-  font-size: 18px;
-}
-
-.btn {
-  display: inline-block;
-  margin-top: 25px;
-  padding: 12px 24px;
-  background: #c9a24e;
-  color: #000;
-  text-decoration: none;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  background: #e0b85c;
 }
 
 /* SECTIONS */
 .section {
-  padding: 90px 20px;
+  padding: 80px 20px;
   text-align: center;
 }
 
 .section h2 {
   color: #c9a24e;
   margin-bottom: 20px;
-  font-size: 32px;
-}
-
-.section p {
-  max-width: 700px;
-  margin: 0 auto;
-  color: #ccc;
-  line-height: 1.6;
 }
 
 .dark {
   background: #111;
 }
 
-/* GRID */
+/* PRODUCTS */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
-  margin-top: 40px;
-  padding: 0 20px;
+  margin-top: 30px;
 }
 
 .card {
   background: #1a1a1a;
-  padding: 30px;
+  padding: 20px;
   border: 1px solid #333;
-  transition: 0.3s;
 }
 
-.card:hover {
-  border-color: #c9a24e;
-  transform: translateY(-5px);
+/* BUTTON */
+.btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #c9a24e;
+  border: none;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 /* FOOTER */
 footer {
-  padding: 25px;
   text-align: center;
-  background: #000;
+  padding: 20px;
+  background: black;
   color: #777;
-  border-top: 1px solid #222;
-  .nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: rgba(0,0,0,0.85);
-  padding: 15px;
-  text-align: center;
-  z-index: 1000;
-  border-bottom: 1px solid #222;
-}
-
-.nav a {
-  color: #c9a24e;
-  margin: 0 15px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.nav a:hover {
-  color: #fff;
-  .nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: rgba(0,0,0,0.85);
-  padding: 15px;
-  text-align: center;
-  z-index: 1000;
-  border-bottom: 1px solid #222;
-}
-
-.nav a {
-  color: #c9a24e;
-  margin: 0 15px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.nav a:hover {
-  color: #fff;
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Meat Shop</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
-
-  <!-- NAV -->
-  <nav class="nav">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#products">Products</a>
-    <a href="#findus">Find Us</a>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="overlay">
-      <h1>The Meat Shop</h1>
-      <p>Premium Halal Butcher • Fresh • Local • Trusted</p>
-      <a href="#products" class="btn">Explore Products</a>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="section" id="about">
-    <h2>About Us</h2>
-    <p>
-      We are an independent 100% halal butcher providing premium quality meats,
-      sourced fresh daily and prepared with care for our community.
-    </p>
-  </section>
-
-  <!-- PRODUCTS -->
-  <section class="section dark" id="products">
-    <h2>Our Products</h2>
-
-    <div class="grid">
-      <div class="card">Beef Cuts (Coming Soon)</div>
-      <div class="card">Chicken Selection (Coming Soon)</div>
-      <div class="card">Lamb Range (Coming Soon)</div>
-      <div class="card">Marinated Meats (Coming Soon)</div>
-    </div>
-  </section>
-
-  <!-- FIND US -->
-  <section class="section" id="findus">
-    <h2>Find Us</h2>
-    <p>Unit 5.1 Celebration Avenue, E20 1DB</p>
-
-    <div style="margin-top:30px;">
-      <iframe
-        src="https://www.google.com/maps?q=Unit+5.1+Celebration+Avenue+E20+1DB&output=embed"
-        width="100%"
-        height="350"
-        style="border:0;"
-        loading="lazy">
-      </iframe>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>© 2026 The Meat Shop</p>
-  </footer>
-
-</body>
-</html>
-}
-}
 }
