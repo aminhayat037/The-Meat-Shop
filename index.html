@@ -6,25 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Meat Shop</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
-:root{
---black:#0e0e0e;
---cream:#f6f4f1;
---red:#8b0000;
-}
-
 body{
 margin:0;
 font-family:Poppins;
-background:var(--cream);
-overflow-x:hidden;
+background:#f6f4f1;
+color:#111;
 }
 
 /* TOP BAR */
 .topbar{
-background:var(--black);
+background:#0e0e0e;
 color:white;
 display:flex;
 justify-content:space-between;
@@ -38,7 +32,6 @@ font-size:13px;
 header{
 display:flex;
 justify-content:space-between;
-align-items:center;
 padding:20px 40px;
 background:white;
 position:sticky;
@@ -48,49 +41,51 @@ z-index:1000;
 
 .logo{
 font-family:"Playfair Display";
-font-size:28px;
+font-size:26px;
 }
 
 /* PRODUCTS */
 .products{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:25px;
-padding:40px;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:20px;
+padding:30px;
 }
 
 .product{
 background:white;
-border-radius:12px;
+border-radius:10px;
 overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,0.06);
+box-shadow:0 10px 20px rgba(0,0,0,0.06);
 }
 
 .product img{
 width:100%;
-height:200px;
+height:180px;
 object-fit:cover;
 }
 
 .product-info{
-padding:15px;
+padding:12px;
 }
 
-.price{color:var(--red);}
+.price{
+color:#8b0000;
+font-weight:500;
+}
 
 /* BUTTON */
 button{
-background:var(--black);
-color:white;
-border:none;
-padding:10px;
 width:100%;
+padding:10px;
+border:none;
+background:#0e0e0e;
+color:white;
 cursor:pointer;
-transition:0.2s;
 }
 
 button:hover{
-background:var(--red);
+background:#8b0000;
 }
 
 /* CART */
@@ -101,18 +96,20 @@ right:-420px;
 width:360px;
 height:100%;
 background:white;
-transition:0.3s;
+transition:0.3s ease;
+box-shadow:-10px 0 30px rgba(0,0,0,0.2);
 padding:15px;
 z-index:2000;
-box-shadow:-10px 0 30px rgba(0,0,0,0.2);
 }
 
 .cart-panel.active{right:0}
 
 .overlay{
 position:fixed;
-top:0;left:0;
-width:100%;height:100%;
+top:0;
+left:0;
+width:100%;
+height:100%;
 background:rgba(0,0,0,0.5);
 display:none;
 z-index:1500;
@@ -137,17 +134,26 @@ align-items:center;
 .qty button{
 width:26px;
 height:26px;
-}
-
-/* REMOVE */
-.remove{
-background:#ddd;
-color:black;
-font-size:11px;
-padding:5px;
+background:#eee;
+color:#000;
 border:none;
 cursor:pointer;
-border-radius:4px;
+}
+
+.remove{
+background:#ddd;
+border:none;
+padding:5px;
+font-size:11px;
+cursor:pointer;
+}
+
+/* DELIVERY */
+.section{
+margin:20px;
+padding:20px;
+background:white;
+border-radius:10px;
 }
 </style>
 
@@ -155,7 +161,7 @@ border-radius:4px;
 
 <body>
 
-<!-- TOP BAR -->
+<!-- TOP -->
 
 <div class="topbar">
 <div>🟢 100% Halal • Fresh Meat • Open Daily</div>
@@ -189,18 +195,20 @@ border-radius:4px;
 
 </div>
 
-<!-- DELIVERY CHECK -->
+<!-- POSTCODE CHECKER (NOW FIXED + VISIBLE) -->
 
-<section style="padding:25px;background:white;margin:20px;border-radius:10px;">
+<section class="section">
 <h3>Check your postcode here to see if we deliver to your area</h3>
+
 <input id="postcode" placeholder="Enter postcode">
 <button onclick="checkDelivery()">Check Delivery</button>
+
 <p id="deliveryResult"></p>
 </section>
 
 <!-- FIND -->
 
-<section id="find" style="padding:40px;background:white;margin:20px;border-radius:10px;">
+<section id="find" class="section">
 <h2>Find Us</h2>
 <p>Unit 5.1 Celebration Avenue, E20 1DB, London</p>
 
@@ -210,93 +218,108 @@ src="https://www.google.com/maps?q=E20+1DB&output=embed"></iframe>
 
 <script>
 
-const products=[
+const shopLat = 51.5433;
+const shopLng = -0.0077;
+
+const products = [
 {name:"Beef Steak",price:12,img:"https://images.unsplash.com/photo-1600891964599-f61ba0e24092"},
 {name:"Chicken Breast",price:6,img:"https://images.unsplash.com/photo-1604908176997-43144d1dbe68"},
-{name:"Lamb Chops",price:10,img:"https://images.unsplash.com/photo-1604908177522-429c8b3f4eb2"},
+{name:"Lamb Chops",price:10,img:"https://images.unsplash.com/photo-1604908177522-429c8b3f4eb2"}
 ];
 
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-/* DISPLAY */
-function show(){
-let c=document.getElementById("products");
-c.innerHTML="";
+/* RENDER PRODUCTS */
+function renderProducts(){
+const el = document.getElementById("products");
+el.innerHTML = "";
+
 products.forEach(p=>{
-c.innerHTML+=`
+el.innerHTML += `
 <div class="product">
 <img src="${p.img}">
 <div class="product-info">
 <h3>${p.name}</h3>
 <p class="price">£${p.price}</p>
-<button onclick="add('${p.name}',${p.price})">Add</button>
+<button onclick="addToCart('${p.name}',${p.price})">Add to Cart</button>
 </div>
 </div>`;
 });
 }
-show();
 
 /* ADD */
-function add(name,price){
-let i=cart.find(x=>x.name===name);
-if(i)i.qty++;
-else cart.push({name,price,qty:1});
+function addToCart(name,price){
+const item = cart.find(i=>i.name===name);
 
-save();
-update();
+if(item){
+item.qty += 1;
+} else {
+cart.push({name,price,qty:1});
+}
+
+sync();
 openCart();
 }
 
-/* UPDATE */
-function update(){
-let c=document.getElementById("cartItems");
-c.innerHTML="";
-let total=0;
+/* UPDATE CART UI */
+function renderCart(){
+const el = document.getElementById("cartItems");
+el.innerHTML = "";
 
-cart.forEach((i,idx)=>{
-total+=i.price*i.qty;
+let total = 0;
 
-c.innerHTML+=`
+cart.forEach((item,index)=>{
+total += item.price * item.qty;
+
+el.innerHTML += `
 <div class="cart-item">
 <div>
-<strong>${i.name}</strong><br>
-£${i.price}
+<strong>${item.name}</strong><br>
+£${item.price}
 </div>
 
 <div class="qty">
-<button onclick="change(${idx},-1)">-</button>
-<span>${i.qty}</span>
-<button onclick="change(${idx},1)">+</button>
+<button onclick="changeQty(${index},-1)">-</button>
+<span>${item.qty}</span>
+<button onclick="changeQty(${index},1)">+</button>
 </div>
 
-<button class="remove" onclick="removeItem(${idx})">X</button>
+<button class="remove" onclick="removeItem(${index})">X</button>
 </div>`;
 });
 
-document.getElementById("total").innerText=total;
-document.getElementById("count").innerText=cart.reduce((a,b)=>a+b.qty,0);
-
-save();
+document.getElementById("total").innerText = total;
+document.getElementById("count").innerText = cart.reduce((a,b)=>a+b.qty,0);
 }
 
-/* CHANGE QTY */
-function change(i,v){
-cart[i].qty+=v;
-if(cart[i].qty<=0) cart.splice(i,1);
-update();
+/* SYNC */
+function sync(){
+localStorage.setItem("cart",JSON.stringify(cart));
+renderCart();
+}
+
+/* QTY */
+function changeQty(i,val){
+cart[i].qty += val;
+
+if(cart[i].qty <= 0){
+cart.splice(i,1);
+}
+
+sync();
 }
 
 /* REMOVE */
 function removeItem(i){
 cart.splice(i,1);
-update();
+sync();
 }
 
 /* CART UI */
 function openCart(){
 document.getElementById("cart").classList.add("active");
 document.getElementById("overlay").classList.add("active");
-update();
+renderCart();
 }
 
 function closeCart(){
@@ -306,70 +329,67 @@ document.getElementById("overlay").classList.remove("active");
 
 /* CHECKOUT */
 function checkout(){
-let msg="Order:%0A";
+let msg = "Order:%0A";
 
 cart.forEach(i=>{
-msg+=`${i.name} x${i.qty}%0A`;
+msg += `${i.name} x${i.qty}%0A`;
 });
 
 window.open("https://wa.me/447000000000?text="+msg);
 }
 
-/* POSTCODE CHECKER (RESTORED PROPERLY) */
+/* POSTCODE CHECKER (FULLY RESTORED + WORKING) */
 async function checkDelivery(){
 
-let pc=document.getElementById("postcode").value;
-if(!pc) return;
+const pc = document.getElementById("postcode").value;
+const res = await fetch("https://api.postcodes.io/postcodes/" + pc);
+const data = await res.json();
 
-let res=await fetch("https://api.postcodes.io/postcodes/"+pc);
-let data=await res.json();
-
-let r=document.getElementById("deliveryResult");
+const out = document.getElementById("deliveryResult");
 
 if(!data.result){
-r.innerText="Invalid postcode";
-r.style.color="red";
+out.innerText = "Invalid postcode";
+out.style.color = "red";
 return;
 }
 
-/* SIMPLE 2 MILE LOGIC (REAL COORD BASED) */
-const shopLat=51.5433;
-const shopLng=-0.0077;
-
+/* distance formula */
 function dist(lat1,lon1,lat2,lon2){
-const R=3958.8;
-let dLat=(lat2-lat1)*Math.PI/180;
-let dLon=(lon2-lon1)*Math.PI/180;
+const R = 3958.8;
+const dLat = (lat2-lat1) * Math.PI/180;
+const dLon = (lon2-lon1) * Math.PI/180;
 
-let a=Math.sin(dLat/2)**2+
-Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
+const a =
+Math.sin(dLat/2)**2 +
+Math.cos(lat1*Math.PI/180) *
+Math.cos(lat2*Math.PI/180) *
 Math.sin(dLon/2)**2;
 
-return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-let d=dist(shopLat,shopLng,data.result.latitude,data.result.longitude);
+const d = dist(
+shopLat,
+shopLng,
+data.result.latitude,
+data.result.longitude
+);
 
-if(d<=2){
-r.innerText="We deliver to you ("+d.toFixed(2)+" miles)";
-r.style.color="green";
-}else{
-r.innerText="Outside delivery area ("+d.toFixed(2)+" miles)";
-r.style.color="red";
+if(d <= 2){
+out.innerText = "We deliver to your area (" + d.toFixed(2) + " miles)";
+out.style.color = "green";
+} else {
+out.innerText = "Sorry, outside delivery area (" + d.toFixed(2) + " miles)";
+out.style.color = "red";
 }
 }
 
-function scrollToFind(){
-document.getElementById("find").scrollIntoView({behavior:"smooth"});
-}
-
-function save(){
-localStorage.setItem("cart",JSON.stringify(cart));
-}
-
-update();
+/* INIT */
+renderProducts();
+renderCart();
 
 </script>
 
 </body>
 </html>
+
