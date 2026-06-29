@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Checkout</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Checkout</h1>
+
+<form onsubmit="submitOrder(event)">
+  <input type="text" placeholder="Full Name" required><br>
+  <input type="text" id="postcode" placeholder="Postcode" required><br>
+  <input type="text" placeholder="Address" required><br>
+  <button type="submit">Place Order</button>
+</form>
+
+<p id="message"></p>
+
+<script>
+function submitOrder(e){
+  e.preventDefault();
+
+  const postcode = document.getElementById("postcode").value.toUpperCase();
+
+  if(!postcode.startsWith("E")){
+    document.getElementById("message").innerText = "❌ Outside delivery radius";
+    return;
+  }
+
+  localStorage.removeItem("cart");
+  document.getElementById("message").innerText = "✅ Order placed successfully!";
+}
+</script>
+
+</body>
+</html>
