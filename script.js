@@ -1,37 +1,33 @@
-const container = document.getElementById("products");
-const qurbaniContainer = document.getElementById("qurbani-products");
+const main = document.getElementById("products-container");
+const qurbani = document.getElementById("qurbani-products");
 
-// LOAD PRODUCTS
-products.forEach(product => {
-const card = document.createElement("div");
-card.classList.add("card");
+products.forEach(p => {
+const div = document.createElement("div");
+div.classList.add("card");
 
-card.innerHTML = `     <img src="${product.image}">     <h3>${product.name}</h3>     <p>£${product.price}</p>     <button onclick="addToCart('${product.name}')">Add to Cart</button>
+div.innerHTML = `     <img src="${p.image}">     <h3>${p.name}</h3>     <p>£${p.price}</p>     <button onclick="addToCart('${p.name}', ${p.price})">Add to Cart</button>
   `;
 
-if(product.category === "qurbani"){
-qurbaniContainer.appendChild(card);
+if(p.category === "qurbani"){
+qurbani.appendChild(div);
 } else {
-container.appendChild(card);
+main.appendChild(div);
 }
 });
 
-// SIMPLE CART
-let cart = [];
-
-function addToCart(name){
-cart.push(name);
+function addToCart(name, price){
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+cart.push({name, price});
+localStorage.setItem("cart", JSON.stringify(cart));
 alert(name + " added to cart");
 }
 
-// POSTCODE CHECK (basic for now)
 function checkPostcode(){
 const input = document.getElementById("postcodeInput").value.toUpperCase();
 
-if(input.startsWith("E20")){
+if(input.startsWith("E15") || input.startsWith("E20") || input.startsWith("E13")){
 document.getElementById("result").innerText = "✅ Delivery available!";
 } else {
 document.getElementById("result").innerText = "❌ Outside delivery area";
 }
 }
-
