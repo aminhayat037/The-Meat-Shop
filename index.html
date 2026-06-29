@@ -1,357 +1,95 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Meat Shop East Village</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Inter',sans-serif;
-}
-
-html{scroll-behavior:smooth}
-
-body{
-  background:#f6f5f1;
-  color:#1f1f1f;
-}
-
-/* NAV */
-nav{
-  position:fixed;
-  top:0;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  gap:22px;
-  padding:15px;
-  background:rgba(255,255,255,0.85);
-  backdrop-filter:blur(12px);
-  z-index:1000;
-  border-bottom:1px solid rgba(0,0,0,0.05);
-}
-
-nav a{
-  text-decoration:none;
-  color:#1f3d2a;
-  font-weight:500;
-  font-size:14px;
-}
-
-/* HERO */
-.hero{
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  color:white;
-  background:
-  linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),
-  url('https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=1800&q=80');
-  background-size:cover;
-  background-position:center;
-}
-
-.hero h1{
-  font-size:54px;
-  font-weight:600;
-  letter-spacing:-1px;
-}
-
-.hero button{
-  margin-top:20px;
-  padding:12px 22px;
-  border:none;
-  background:#1f3d2a;
-  color:white;
-  border-radius:8px;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-.hero button:hover{
-  transform:translateY(-2px);
-}
-
-/* SECTIONS */
-section{
-  padding:110px 20px;
-  max-width:1100px;
-  margin:auto;
-  opacity:0;
-  transform:translateY(20px);
-  animation:fadeIn 0.8s forwards;
-}
-
-@keyframes fadeIn{
-  to{opacity:1;transform:translateY(0);}
-}
-
-h2{margin-bottom:18px;font-size:28px}
-
-/* PRODUCTS */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px;
-}
-
-.card{
-  background:white;
-  padding:20px;
-  border-radius:14px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.05);
-  transition:0.3s;
-}
-
-.card:hover{
-  transform:translateY(-5px);
-}
-
-.card button{
-  margin-top:12px;
-  width:100%;
-  padding:10px;
-  border:none;
-  background:#1f3d2a;
-  color:white;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-/* CART DRAWER */
-.overlay{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.3);
-  display:none;
-}
-
-.cart{
-  position:fixed;
-  right:-400px;
-  top:0;
-  width:350px;
-  height:100%;
-  background:white;
-  padding:20px;
-  box-shadow:-15px 0 40px rgba(0,0,0,0.1);
-  transition:0.3s;
-  z-index:2000;
-}
-
-.cart.open{
-  right:0;
-}
-
-.cart-item{
-  display:flex;
-  justify-content:space-between;
-  margin:10px 0;
-  font-size:14px;
-}
-
-.remove{
-  background:#c0392b;
-  border:none;
-  color:white;
-  padding:4px 8px;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-/* CHECKOUT SCREEN */
-.checkout{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:white;
-  display:none;
-  padding:50px;
-  z-index:3000;
-}
-
-/* MOBILE ORDER BAR */
-.mobile-bar{
-  position:fixed;
-  bottom:0;
-  left:0;
-  width:100%;
-  background:white;
-  display:none;
-  justify-content:space-between;
-  padding:12px 15px;
-  box-shadow:0 -5px 20px rgba(0,0,0,0.1);
-}
-
-.mobile-bar button{
-  background:#1f3d2a;
-  color:white;
-  border:none;
-  padding:10px;
-  border-radius:8px;
-}
-@media(max-width:768px){
-  .mobile-bar{display:flex;}
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<nav>
-  <a href="#home">Home</a>
-  <a href="#about">About</a>
-  <a href="#products">Products</a>
-  <a href="#delivery">Delivery</a>
-  <a href="#findus">Find Us</a>
-  <a onclick="openCart()">Cart 🛒</a>
-</nav>
+<!-- 🔴 TOP SCROLLING BANNER -->
 
-<!-- HERO -->
-<div class="hero" id="home">
-  <div>
-    <h1>The Meat Shop East Village</h1>
-    <button onclick="document.getElementById('products').scrollIntoView()">
-      Shop Now
-    </button>
+<div class="top-banner">
+  <div class="banner-track">
+    🚚 We Deliver Fresh Meat • 100% Halal Certified • Same Day Collection Available • Order Now •
+    🚚 We Deliver Fresh Meat • 100% Halal Certified • Same Day Collection Available • Order Now •
   </div>
 </div>
 
-<!-- ABOUT -->
-<section id="about">
-  <h2>About Us</h2>
-  <p>Premium halal butcher providing high-quality fresh meat in East Village.</p>
-</section>
+<!-- NAVBAR -->
 
-<!-- PRODUCTS -->
-<section id="products">
-  <h2>Products (Coming Soon)</h2>
-
-  <div class="grid">
-    <div class="card">
-      <h3>Beef</h3>
-      <button onclick="addToCart('Beef',10)">Add £10</button>
+<header>
+  <h1>The Meat Shop</h1>
+  <nav>
+    <div class="dropdown">
+      <button>Shop ▼</button>
+      <div class="dropdown-content">
+        <a href="#">All Products</a>
+        <a href="#">Festive Turkey</a>
+        <a href="#">Beef</a>
+        <a href="#">Chicken</a>
+        <a href="#">Fish</a>
+        <a href="#">Goat</a>
+        <a href="#">Lamb</a>
+        <a href="#">Mince</a>
+        <a href="#">Qurbani</a>
+        <a href="#">Steak</a>
+        <a href="#">Marinated Meats</a>
+      </div>
     </div>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
 
-    <div class="card">
-      <h3>Chicken</h3>
-      <button onclick="addToCart('Chicken',8)">Add £8</button>
-    </div>
-  </div>
+<!-- HERO -->
+
+<section class="hero">
+  <h2>Fresh Halal Meat Delivered</h2>
+  <p>We are independent butcher providing fresh Halal meat in East Village.</p>
+  <a href="#" class="btn">Shop Now</a>
 </section>
 
 <!-- DELIVERY -->
-<section id="delivery">
-  <h2>Delivery Checker</h2>
-  <input id="postcode" placeholder="Enter postcode">
-  <button onclick="checkDelivery()" class="card button">Check</button>
-  <p id="deliveryResult"></p>
+
+<section class="delivery">
+  🚚 We deliver within a 2-mile radius
 </section>
 
-<!-- FIND US -->
-<section id="findus">
-  <h2>Find Us</h2>
-  <iframe width="100%" height="300"
-    src="https://www.google.com/maps?q=E20+1DB&output=embed"></iframe>
+<!-- POSTCODE CHECK -->
+
+<section class="postcode">
+  <h3>Check Delivery Area</h3>
+  <input type="text" id="postcodeInput" placeholder="Enter postcode">
+  <button onclick="checkPostcode()">Check</button>
+  <p id="result"></p>
 </section>
 
-<!-- CART OVERLAY -->
-<div class="overlay" id="overlay" onclick="toggleCart()"></div>
+<!-- QURBANI -->
 
-<div class="cart" id="cart">
-  <h2>Your Cart</h2>
-  <div id="cartItems"></div>
-  <h3>Total: £<span id="total">0</span></h3>
-  <button onclick="goCheckout()">Checkout</button>
-</div>
+<section>
+  <h2>Qurbani</h2>
+  <div class="grid" id="qurbani-products"></div>
+</section>
 
-<!-- CHECKOUT -->
-<div class="checkout" id="checkout">
-  <h1>Checkout</h1>
-  <p>Payment system will be added later (Stripe stage)</p>
-  <button onclick="closeCheckout()">Close</button>
-</div>
+<!-- PRODUCTS -->
 
-<!-- MOBILE BAR -->
-<div class="mobile-bar">
-  <span id="mobTotal">£0</span>
-  <button onclick="openCart()">View Cart</button>
-</div>
+<section>
+  <h2>Products</h2>
+  <div class="grid" id="products"></div>
+</section>
 
-<script>
-let cart=[];
+<!-- FOOTER -->
 
-function addToCart(n,p){
-  cart.push({n,p});
-  update();
-}
+<footer id="contact">
+  <p>📍 Unit 5.1 Celebration Avenue E20 1DB</p>
+</footer>
 
-function update(){
-  let box=document.getElementById("cartItems");
-  let total=0;
+<script src="products.js"></script>
 
-  box.innerHTML="";
-
-  cart.forEach((i,idx)=>{
-    total+=i.p;
-
-    box.innerHTML+=`
-      <div class="cart-item">
-        ${i.n} £${i.p}
-        <button class="remove" onclick="remove(${idx})">X</button>
-      </div>
-    `;
-  });
-
-  document.getElementById("total").innerText=total;
-  document.getElementById("mobTotal").innerText="£"+total;
-}
-
-function remove(i){
-  cart.splice(i,1);
-  update();
-}
-
-function openCart(){
-  document.getElementById("cart").classList.add("open");
-  document.getElementById("overlay").style.display="block";
-}
-
-function toggleCart(){
-  document.getElementById("cart").classList.remove("open");
-  document.getElementById("overlay").style.display="none";
-}
-
-function goCheckout(){
-  document.getElementById("checkout").style.display="block";
-}
-
-function closeCheckout(){
-  document.getElementById("checkout").style.display="none";
-}
-
-function checkDelivery(){
-  let p=document.getElementById("postcode").value.toLowerCase();
-  let zones=["e20","e15","e10","e9"];
-
-  document.getElementById("deliveryResult").innerText=
-    zones.some(z=>p.includes(z))
-    ?"We deliver to you":"Outside delivery area";
-}
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
