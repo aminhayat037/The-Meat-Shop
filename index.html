@@ -8,222 +8,71 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
-body{
-margin:0;
-font-family:Poppins;
-background:#f6f4f1;
-color:#111;
-scroll-behavior:smooth;
-}
-
-/* TOP BAR */
-.topbar{
-position:sticky;
-top:0;
-z-index:1000;
-background:#0e0e0e;
-color:white;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:12px 20px;
-font-size:13px;
-}
-
-.nav{
-display:flex;
-gap:18px;
-}
-
-.nav span{
-cursor:pointer;
-opacity:0.85;
-transition:0.2s;
-}
-
-.nav span:hover{opacity:1}
-
-/* HERO / HOME */
-.hero{
-height:85vh;
-background:
-linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.55)),
-url("https://images.unsplash.com/photo-1600891964599-f61ba0e24092")
-center/cover no-repeat;
-
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-color:white;
-padding:20px;
-}
-
-.hero h1{
-font-family:"Playfair Display";
-font-size:52px;
-margin:0;
-}
-
-.hero p{
-max-width:600px;
-font-size:16px;
-opacity:0.9;
-}
-
-.hero button{
-margin-top:20px;
-padding:12px 20px;
-border:none;
-background:white;
-color:black;
-cursor:pointer;
-font-weight:500;
-}
-
-/* HEADER */
-header{
-padding:20px 40px;
-background:white;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.logo{
-font-family:"Playfair Display";
-font-size:26px;
-}
-
-/* SHOP */
-.products{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-gap:20px;
-padding:30px;
-}
-
-.product{
-background:white;
-border-radius:10px;
-overflow:hidden;
-box-shadow:0 6px 18px rgba(0,0,0,0.06);
-}
-
-.product img{
-width:100%;
-height:180px;
-object-fit:cover;
-background:#ddd;
-}
-
-.product-info{
-padding:12px;
-}
-
-.price{
-color:#8b0000;
-font-weight:500;
-}
-
-/* BUTTON */
-button{
-width:100%;
-padding:10px;
-border:none;
-background:#111;
-color:white;
-cursor:pointer;
-}
-
+body{margin:0;font-family:Poppins;background:#f6f4f1;color:#111}
+.topbar{background:#0e0e0e;color:white;display:flex;justify-content:space-between;padding:12px 20px}
+.nav span{cursor:pointer;margin-left:15px}
+.hero{height:80vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),
+url("https://images.unsplash.com/photo-1600891964599-f61ba0e24092") center/cover;color:white}
+.hero h1{font-size:50px;font-family:Playfair Display}
+button{background:#111;color:white;border:none;padding:10px;cursor:pointer;width:100%}
 button:hover{background:#8b0000}
 
-/* CART */
-.cart-panel{
-position:fixed;
-top:0;
-right:-400px;
-width:340px;
-height:100%;
-background:white;
-transition:0.3s;
-box-shadow:-10px 0 25px rgba(0,0,0,0.2);
-padding:15px;
-z-index:2000;
-}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;padding:30px}
+.product{background:white;border-radius:10px;overflow:hidden}
+.product img{width:100%;height:180px;object-fit:cover}
+.product-info{padding:10px}
+.price{color:#8b0000}
 
+.cart-panel{position:fixed;right:-400px;top:0;width:340px;height:100%;background:white;transition:0.3s;padding:15px}
 .cart-panel.active{right:0}
-
-.overlay{
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,0.5);
-display:none;
-z-index:1500;
-}
-
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:black;opacity:0.5;display:none}
 .overlay.active{display:block}
+.cart-item{display:flex;justify-content:space-between;margin:10px 0}
 
-.cart-item{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin:10px 0;
-border-bottom:1px solid #eee;
-padding-bottom:8px;
-}
-
-.qty button{
-width:24px;
-height:24px;
-background:#eee;
-border:none;
-cursor:pointer;
-}
-
-/* SECTIONS */
-.section{
-margin:20px;
-padding:20px;
-background:white;
-border-radius:10px;
-}
+.section{margin:20px;padding:20px;background:white;border-radius:10px}
 </style>
 </head>
 
 <body>
 
-<!-- TOP NAV -->
+<!-- TOP -->
 <div class="topbar">
-
-<div>🟢 The Meat Shop • 100% Halal Fresh Meat</div>
-
+<div>The Meat Shop • 100% Halal</div>
 <div class="nav">
 <span onclick="go('home')">Home</span>
 <span onclick="go('shop')">Shop</span>
-<span onclick="go('find')">Location</span>
-<span onclick="go('account')">Account</span>
-<span onclick="openCart()">Cart 🛒 (<span id="count">0</span>)</span>
+<span onclick="go('delivery')">Delivery</span>
+<span onclick="openCart()">Cart (<span id="count">0</span>)</span>
+</div>
 </div>
 
-</div>
-
-<!-- HERO / HOME PAGE -->
+<!-- HERO -->
 <section id="home" class="hero">
-<h1>Premium Halal Butcher</h1>
-<p>Fresh, high-quality halal meat delivered straight to your door in East London. Trusted. Fresh. Local.</p>
+<h1>Fresh Halal Meat Delivered</h1>
+<p>Premium quality meat delivered with flexible time slots</p>
 <button onclick="go('shop')">Shop Now</button>
 </section>
 
-<!-- HEADER (SMALL BRAND BAR) -->
-<header>
-<div class="logo">The Meat Shop</div>
-</header>
-
 <!-- SHOP -->
 <section id="shop" class="products"></section>
+
+<!-- DELIVERY SLOT BOOKING -->
+<section id="delivery" class="section">
+<h2>Select Delivery Slot</h2>
+
+<label>Select Date:</label>
+<input type="date" id="date">
+
+<br><br>
+
+<label>Select Time Slot:</label>
+<select id="slot">
+<option>10:00 - 12:00 (Morning)</option>
+<option>12:00 - 15:00 (Afternoon)</option>
+<option>15:00 - 18:00 (Evening)</option>
+</select>
+</section>
 
 <!-- CART -->
 <div class="overlay" id="overlay" onclick="closeCart()"></div>
@@ -231,30 +80,14 @@ border-radius:10px;
 <div class="cart-panel" id="cart">
 <h3>Your Cart</h3>
 <div id="cartItems"></div>
+
 <h3>Total: £<span id="total">0</span></h3>
+
 <button onclick="checkout()">Checkout via WhatsApp</button>
 </div>
 
-<!-- LOCATION -->
-<section id="find" class="section">
-<h2>Location</h2>
-<p>Unit 5.1 Celebration Avenue, E20 1DB, London</p>
-
-<iframe style="width:100%;height:250px;border:0;border-radius:10px;"
-src="https://www.google.com/maps?q=E20+1DB&output=embed"></iframe>
-</section>
-
-<!-- ACCOUNT -->
-<section id="account" class="section">
-<h2>Account</h2>
-<input placeholder="Name">
-<input placeholder="Email">
-<button>Create / Login</button>
-</section>
-
 <script>
 
-/* PRODUCTS */
 const products=[
 {name:"Beef Steak",price:12.99,img:"https://images.unsplash.com/photo-1600891964599-f61ba0e24092"},
 {name:"Chicken Breast",price:6.99,img:"https://images.unsplash.com/photo-1604908176997-43144d1dbe68"},
@@ -262,36 +95,28 @@ const products=[
 {name:"Minced Beef",price:7.99,img:"https://images.unsplash.com/photo-1604908177000-2a0b3c4f4b11"}
 ];
 
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
+let cart=[];
 
-/* RENDER */
 function render(){
 let box=document.getElementById("shop");
 box.innerHTML="";
-
 products.forEach(p=>{
 box.innerHTML+=`
 <div class="product">
 <img src="${p.img}">
 <div class="product-info">
 <h3>${p.name}</h3>
-<p class="price">£${p.price} / kg</p>
+<p class="price">£${p.price}</p>
 <button onclick="add('${p.name}',${p.price})">Add</button>
 </div>
 </div>`;
 });
 }
 
-/* CART */
 function add(name,price){
-let item=cart.find(i=>i.name===name);
-
-if(item)item.qty++;
-else cart.push({name,price,qty:1});
-
-save();
-update();
-openCart();
+let i=cart.find(x=>x.name===name);
+if(i)i.qty++;else cart.push({name,price,qty:1});
+update();openCart();
 }
 
 function update(){
@@ -301,37 +126,16 @@ let total=0;
 
 cart.forEach(i=>{
 total+=i.price*i.qty;
-
 box.innerHTML+=`
 <div class="cart-item">
-<div><strong>${i.name}</strong></div>
-
-<div>
-<button onclick="change('${i.name}',-1)">-</button>
-<span>${i.qty}</span>
-<button onclick="change('${i.name}',1)">+</button>
-</div>
+<div>${i.name} x${i.qty}</div>
 </div>`;
 });
 
 document.getElementById("total").innerText=total.toFixed(2);
-document.getElementById("count").innerText=cart.reduce((a,b)=>a+b.qty,0);
-
-save();
+document.getElementById("count").innerText=cart.length;
 }
 
-function change(name,v){
-let item=cart.find(i=>i.name===name);
-item.qty+=v;
-
-if(item.qty<=0){
-cart=cart.filter(i=>i.name!==name);
-}
-
-update();
-}
-
-/* CART UI */
 function openCart(){
 document.getElementById("cart").classList.add("active");
 document.getElementById("overlay").classList.add("active");
@@ -343,29 +147,34 @@ document.getElementById("cart").classList.remove("active");
 document.getElementById("overlay").classList.remove("active");
 }
 
-/* NAV */
 function go(id){
 document.getElementById(id).scrollIntoView({behavior:"smooth"});
 }
 
-/* CHECKOUT */
+/* ⭐ DELIVERY SLOT INCLUDED IN CHECKOUT */
 function checkout(){
+
+let date=document.getElementById("date").value;
+let slot=document.getElementById("slot").value;
+
+if(!date){
+alert("Please select delivery date");
+return;
+}
+
 let msg="Order:%0A";
+
 cart.forEach(i=>{
 msg+=`${i.name} x${i.qty}%0A`;
 });
 
+msg+=`%0ADelivery Date: ${date}`;
+msg+=`%0ADelivery Slot: ${slot}`;
+
 window.open("https://wa.me/447000000000?text="+msg);
 }
 
-/* SAVE */
-function save(){
-localStorage.setItem("cart",JSON.stringify(cart));
-}
-
 render();
-update();
-
 </script>
 
 </body>
