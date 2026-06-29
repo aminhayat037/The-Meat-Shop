@@ -13,7 +13,6 @@ body{
 margin:0;
 font-family:Poppins;
 background:#f6f4f1;
-color:#111;
 }
 
 /* TOP BAR */
@@ -22,8 +21,27 @@ background:#0e0e0e;
 color:white;
 display:flex;
 justify-content:space-between;
+align-items:center;
 padding:10px 20px;
 font-size:13px;
+}
+
+.nav{
+display:flex;
+gap:18px;
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:1px;
+}
+
+.nav span{
+cursor:pointer;
+opacity:0.8;
+transition:0.2s;
+}
+
+.nav span:hover{
+opacity:1;
 }
 
 /* HEADER */
@@ -70,7 +88,6 @@ padding:12px;
 
 .price{
 color:#8b0000;
-font-weight:500;
 }
 
 /* BUTTON */
@@ -130,7 +147,7 @@ border:none;
 cursor:pointer;
 }
 
-/* SECTION */
+/* SECTIONS */
 .section{
 margin:20px;
 padding:20px;
@@ -143,25 +160,31 @@ border-radius:10px;
 
 <body>
 
-<!-- TOP BAR -->
+<!-- TOP BAR (FIXED NAVIGATION) -->
 
 <div class="topbar">
-<div>🟢 100% Halal • Fresh Meat • Per KG Pricing</div>
-<div onclick="scrollToFind()" style="cursor:pointer">📍 Find Us</div>
+
+<div>🟢 The Meat Shop • 100% Halal Fresh Meat</div>
+
+<div class="nav">
+<span onclick="scrollToSection('home')">Home</span>
+<span onclick="scrollToSection('shop')">Shop</span>
+<span onclick="scrollToSection('find')">Location</span>
+<span onclick="scrollToSection('account')">Account</span>
+<span onclick="openCart()">Cart 🛒 (<span id="count">0</span>)</span>
+</div>
+
 </div>
 
 <!-- HEADER -->
 
-<header>
+<header id="home">
 <div class="logo">The Meat Shop</div>
-<div onclick="openCart()" style="cursor:pointer">
-🛒 Cart (<span id="count">0</span>)
-</div>
 </header>
 
 <!-- PRODUCTS -->
 
-<section class="products" id="products"></section>
+<section id="shop" class="products"></section>
 
 <!-- CART -->
 
@@ -177,7 +200,7 @@ border-radius:10px;
 
 </div>
 
-<!-- POSTCODE CHECK -->
+<!-- POSTCODE -->
 
 <section class="section">
 <h3>Check your postcode here to see if we deliver to your area</h3>
@@ -186,122 +209,96 @@ border-radius:10px;
 <p id="deliveryResult"></p>
 </section>
 
-<!-- FIND US -->
+<!-- FIND -->
 
-<section class="section" id="find">
-<h2>Find Us</h2>
+<section id="find" class="section">
+<h2>Location</h2>
 <p>Unit 5.1 Celebration Avenue, E20 1DB, London</p>
 
 <iframe style="width:100%;height:300px;border:0;border-radius:10px;"
 src="https://www.google.com/maps?q=E20+1DB&output=embed"></iframe>
 </section>
 
+<!-- ACCOUNT -->
+
+<section id="account" class="section">
+<h2>Account</h2>
+<input placeholder="Name">
+<input placeholder="Email">
+<button>Login / Create Account</button>
+</section>
+
 <script>
 
-/* =========================
-   🥩 PRODUCT DATABASE (PER KG)
-   EDIT PRICES HERE ONLY
-========================= */
-
-const products = [
-{name:"Beef Steak", price:12.99, img:"https://images.unsplash.com/photo-1600891964599-f61ba0e24092"},
-{name:"Chicken Breast", price:6.99, img:"https://images.unsplash.com/photo-1604908176997-43144d1dbe68"},
-{name:"Lamb Chops", price:11.99, img:"https://images.unsplash.com/photo-1604908177522-429c8b3f4eb2"},
-{name:"Minced Beef", price:7.99, img:"https://images.unsplash.com/photo-1604908177000-2a0b3c4f4b11"},
-{name:"Goat Meat", price:10.99, img:"https://images.unsplash.com/photo-1606756790138-261d2b21cd2f"},
-{name:"Marinated Chicken", price:8.99, img:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1"},
-{name:"Whole Chicken", price:5.99, img:"https://images.unsplash.com/photo-1604503468506-a8da13d82791"},
-{name:"Fish Fillet", price:9.99, img:"https://images.unsplash.com/photo-1544943910-4c1dc44aab44"}
+/* PRODUCTS */
+const products=[
+{name:"Beef Steak",price:12.99,img:"https://images.unsplash.com/photo-1600891964599-f61ba0e24092"},
+{name:"Chicken Breast",price:6.99,img:"https://images.unsplash.com/photo-1604908176997-43144d1dbe68"},
+{name:"Lamb Chops",price:11.99,img:"https://images.unsplash.com/photo-1604908177522-429c8b3f4eb2"},
+{name:"Minced Beef",price:7.99,img:"https://images.unsplash.com/photo-1604908177000-2a0b3c4f4b11"}
 ];
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
 
-/* =========================
-   RENDER PRODUCTS
-========================= */
-
-function renderProducts(){
-let box = document.getElementById("products");
-box.innerHTML="";
-
+/* RENDER */
+function render(){
+let c=document.getElementById("shop");
+c.innerHTML="";
 products.forEach(p=>{
-box.innerHTML += `
+c.innerHTML+=`
 <div class="product">
 <img src="${p.img}">
 <div class="product-info">
 <h3>${p.name}</h3>
 <p class="price">£${p.price} / kg</p>
-<button onclick="add('${p.name}',${p.price})">Add to Cart</button>
+<button onclick="add('${p.name}',${p.price})">Add</button>
 </div>
 </div>`;
 });
 }
 
-renderProducts();
-
-/* =========================
-   CART FUNCTIONS
-========================= */
-
+/* ADD */
 function add(name,price){
-let item = cart.find(i=>i.name===name);
-
-if(item){
-item.qty++;
-} else {
-cart.push({name,price,qty:1});
+let i=cart.find(x=>x.name===name);
+if(i)i.qty++;
+else cart.push({name,price,qty:1});
+save();update();openCart();
 }
 
-save();
-update();
-openCart();
-}
-
+/* CART */
 function update(){
-let box=document.getElementById("cartItems");
-box.innerHTML="";
+let c=document.getElementById("cartItems");
+c.innerHTML="";
 let total=0;
 
 cart.forEach(i=>{
-total += i.price * i.qty;
+total+=i.price*i.qty;
 
-box.innerHTML += `
+c.innerHTML+=`
 <div class="cart-item">
-<div>
-<strong>${i.name}</strong><br>
-£${i.price}/kg
-</div>
+<div><strong>${i.name}</strong></div>
 
-<div class="qty">
-<button onclick="changeQty('${i.name}',-1)">-</button>
-<span>${i.qty}kg</span>
-<button onclick="changeQty('${i.name}',1)">+</button>
+<div>
+<button onclick="change('${i.name}',-1)">-</button>
+<span>${i.qty}</span>
+<button onclick="change('${i.name}',1)">+</button>
 </div>
 </div>`;
 });
 
-document.getElementById("total").innerText = total.toFixed(2);
-document.getElementById("count").innerText = cart.reduce((a,b)=>a+b.qty,0);
-
+document.getElementById("total").innerText=total.toFixed(2);
+document.getElementById("count").innerText=cart.reduce((a,b)=>a+b.qty,0);
 save();
 }
 
-function changeQty(name,val){
-let item = cart.find(i=>i.name===name);
-if(!item) return;
-
-item.qty += val;
-if(item.qty <= 0){
-cart = cart.filter(i=>i.name!==name);
-}
-
+function change(name,v){
+let i=cart.find(x=>x.name===name);
+i.qty+=v;
+if(i.qty<=0) cart=cart.filter(x=>x.name!==name);
 update();
 }
 
-/* =========================
-   CART UI
-========================= */
-
+/* CART UI */
 function openCart(){
 document.getElementById("cart").classList.add("active");
 document.getElementById("overlay").classList.add("active");
@@ -313,67 +310,18 @@ document.getElementById("cart").classList.remove("active");
 document.getElementById("overlay").classList.remove("active");
 }
 
-/* =========================
-   CHECKOUT
-========================= */
-
+/* CHECKOUT */
 function checkout(){
 let msg="Order:%0A";
-
 cart.forEach(i=>{
-msg += `${i.name} - ${i.qty}kg = £${(i.price*i.qty).toFixed(2)}%0A`;
+msg+=`${i.name} x${i.qty}%0A`;
 });
-
 window.open("https://wa.me/447000000000?text="+msg);
 }
 
-/* =========================
-   POSTCODE CHECKER
-========================= */
-
-async function checkDelivery(){
-
-const pc=document.getElementById("postcode").value;
-const res=await fetch("https://api.postcodes.io/postcodes/"+pc);
-const data=await res.json();
-
-const out=document.getElementById("deliveryResult");
-
-if(!data.result){
-out.innerText="Invalid postcode";
-out.style.color="red";
-return;
-}
-
-const shopLat=51.5433;
-const shopLng=-0.0077;
-
-function dist(a,b,c,d){
-const R=3958.8;
-const dLat=(c-a)*Math.PI/180;
-const dLon=(d-b)*Math.PI/180;
-
-const x=
-Math.sin(dLat/2)**2 +
-Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*
-Math.sin(dLon/2)**2;
-
-return 2*R*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
-}
-
-const d=dist(
-shopLat,shopLng,
-data.result.latitude,
-data.result.longitude
-);
-
-if(d<=2){
-out.innerText="We deliver to you ("+d.toFixed(2)+" miles)";
-out.style.color="green";
-}else{
-out.innerText="Outside delivery area ("+d.toFixed(2)+" miles)";
-out.style.color="red";
-}
+/* NAV */
+function scrollToSection(id){
+document.getElementById(id).scrollIntoView({behavior:"smooth"});
 }
 
 /* SAVE */
@@ -381,7 +329,7 @@ function save(){
 localStorage.setItem("cart",JSON.stringify(cart));
 }
 
-update();
+render();update();
 
 </script>
 
