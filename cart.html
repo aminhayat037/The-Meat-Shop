@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cart - The Meat Shop</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Your Cart</h1>
+<div id="cart-items"></div>
+
+<h2 id="total"></h2>
+
+<a href="checkout.html" class="btn">Proceed to Checkout</a>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+const container = document.getElementById("cart-items");
+let total = 0;
+
+cart.forEach(item => {
+  const div = document.createElement("div");
+  div.innerHTML = `${item.name} - £${item.price}`;
+  container.appendChild(div);
+  total += item.price;
+});
+
+document.getElementById("total").innerText = "Total: £" + total.toFixed(2);
+</script>
+
+</body>
+</html>
