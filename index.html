@@ -26,12 +26,11 @@ padding:10px 20px;
 font-size:13px;
 }
 
-.topbar div{cursor:pointer;}
-
 /* HEADER */
 header{
 display:flex;
 justify-content:space-between;
+align-items:center;
 padding:20px 40px;
 background:white;
 position:sticky;
@@ -56,7 +55,7 @@ padding:30px;
 background:white;
 border-radius:10px;
 overflow:hidden;
-box-shadow:0 10px 20px rgba(0,0,0,0.06);
+box-shadow:0 8px 20px rgba(0,0,0,0.06);
 }
 
 .product img{
@@ -79,7 +78,7 @@ button{
 width:100%;
 padding:10px;
 border:none;
-background:#0e0e0e;
+background:#111;
 color:white;
 cursor:pointer;
 }
@@ -96,7 +95,7 @@ right:-420px;
 width:360px;
 height:100%;
 background:white;
-transition:0.3s ease;
+transition:0.3s;
 box-shadow:-10px 0 30px rgba(0,0,0,0.2);
 padding:15px;
 z-index:2000;
@@ -106,10 +105,8 @@ z-index:2000;
 
 .overlay{
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+top:0;left:0;
+width:100%;height:100%;
 background:rgba(0,0,0,0.5);
 display:none;
 z-index:1500;
@@ -125,30 +122,15 @@ border-bottom:1px solid #eee;
 padding-bottom:8px;
 }
 
-.qty{
-display:flex;
-gap:6px;
-align-items:center;
-}
-
 .qty button{
 width:26px;
 height:26px;
 background:#eee;
-color:#000;
 border:none;
 cursor:pointer;
 }
 
-.remove{
-background:#ddd;
-border:none;
-padding:5px;
-font-size:11px;
-cursor:pointer;
-}
-
-/* DELIVERY */
+/* SECTION */
 .section{
 margin:20px;
 padding:20px;
@@ -161,11 +143,11 @@ border-radius:10px;
 
 <body>
 
-<!-- TOP -->
+<!-- TOP BAR -->
 
 <div class="topbar">
-<div>🟢 100% Halal • Fresh Meat • Open Daily</div>
-<div onclick="scrollToFind()">📍 Find Us</div>
+<div>🟢 100% Halal • Fresh Meat • Per KG Pricing</div>
+<div onclick="scrollToFind()" style="cursor:pointer">📍 Find Us</div>
 </div>
 
 <!-- HEADER -->
@@ -195,20 +177,18 @@ border-radius:10px;
 
 </div>
 
-<!-- POSTCODE CHECKER (NOW FIXED + VISIBLE) -->
+<!-- POSTCODE CHECK -->
 
 <section class="section">
 <h3>Check your postcode here to see if we deliver to your area</h3>
-
 <input id="postcode" placeholder="Enter postcode">
-<button onclick="checkDelivery()">Check Delivery</button>
-
+<button onclick="checkDelivery()">Check</button>
 <p id="deliveryResult"></p>
 </section>
 
-<!-- FIND -->
+<!-- FIND US -->
 
-<section id="find" class="section">
+<section class="section" id="find">
 <h2>Find Us</h2>
 <p>Unit 5.1 Celebration Avenue, E20 1DB, London</p>
 
@@ -218,108 +198,114 @@ src="https://www.google.com/maps?q=E20+1DB&output=embed"></iframe>
 
 <script>
 
-const shopLat = 51.5433;
-const shopLng = -0.0077;
+/* =========================
+   🥩 PRODUCT DATABASE (PER KG)
+   EDIT PRICES HERE ONLY
+========================= */
 
 const products = [
-{name:"Beef Steak",price:12,img:"https://images.unsplash.com/photo-1600891964599-f61ba0e24092"},
-{name:"Chicken Breast",price:6,img:"https://images.unsplash.com/photo-1604908176997-43144d1dbe68"},
-{name:"Lamb Chops",price:10,img:"https://images.unsplash.com/photo-1604908177522-429c8b3f4eb2"}
+{name:"Beef Steak", price:12.99, img:"https://images.unsplash.com/photo-1600891964599-f61ba0e24092"},
+{name:"Chicken Breast", price:6.99, img:"https://images.unsplash.com/photo-1604908176997-43144d1dbe68"},
+{name:"Lamb Chops", price:11.99, img:"https://images.unsplash.com/photo-1604908177522-429c8b3f4eb2"},
+{name:"Minced Beef", price:7.99, img:"https://images.unsplash.com/photo-1604908177000-2a0b3c4f4b11"},
+{name:"Goat Meat", price:10.99, img:"https://images.unsplash.com/photo-1606756790138-261d2b21cd2f"},
+{name:"Marinated Chicken", price:8.99, img:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1"},
+{name:"Whole Chicken", price:5.99, img:"https://images.unsplash.com/photo-1604503468506-a8da13d82791"},
+{name:"Fish Fillet", price:9.99, img:"https://images.unsplash.com/photo-1544943910-4c1dc44aab44"}
 ];
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-/* RENDER PRODUCTS */
+/* =========================
+   RENDER PRODUCTS
+========================= */
+
 function renderProducts(){
-const el = document.getElementById("products");
-el.innerHTML = "";
+let box = document.getElementById("products");
+box.innerHTML="";
 
 products.forEach(p=>{
-el.innerHTML += `
+box.innerHTML += `
 <div class="product">
 <img src="${p.img}">
 <div class="product-info">
 <h3>${p.name}</h3>
-<p class="price">£${p.price}</p>
-<button onclick="addToCart('${p.name}',${p.price})">Add to Cart</button>
+<p class="price">£${p.price} / kg</p>
+<button onclick="add('${p.name}',${p.price})">Add to Cart</button>
 </div>
 </div>`;
 });
 }
 
-/* ADD */
-function addToCart(name,price){
-const item = cart.find(i=>i.name===name);
+renderProducts();
+
+/* =========================
+   CART FUNCTIONS
+========================= */
+
+function add(name,price){
+let item = cart.find(i=>i.name===name);
 
 if(item){
-item.qty += 1;
+item.qty++;
 } else {
 cart.push({name,price,qty:1});
 }
 
-sync();
+save();
+update();
 openCart();
 }
 
-/* UPDATE CART UI */
-function renderCart(){
-const el = document.getElementById("cartItems");
-el.innerHTML = "";
+function update(){
+let box=document.getElementById("cartItems");
+box.innerHTML="";
+let total=0;
 
-let total = 0;
+cart.forEach(i=>{
+total += i.price * i.qty;
 
-cart.forEach((item,index)=>{
-total += item.price * item.qty;
-
-el.innerHTML += `
+box.innerHTML += `
 <div class="cart-item">
 <div>
-<strong>${item.name}</strong><br>
-£${item.price}
+<strong>${i.name}</strong><br>
+£${i.price}/kg
 </div>
 
 <div class="qty">
-<button onclick="changeQty(${index},-1)">-</button>
-<span>${item.qty}</span>
-<button onclick="changeQty(${index},1)">+</button>
+<button onclick="changeQty('${i.name}',-1)">-</button>
+<span>${i.qty}kg</span>
+<button onclick="changeQty('${i.name}',1)">+</button>
 </div>
-
-<button class="remove" onclick="removeItem(${index})">X</button>
 </div>`;
 });
 
-document.getElementById("total").innerText = total;
+document.getElementById("total").innerText = total.toFixed(2);
 document.getElementById("count").innerText = cart.reduce((a,b)=>a+b.qty,0);
+
+save();
 }
 
-/* SYNC */
-function sync(){
-localStorage.setItem("cart",JSON.stringify(cart));
-renderCart();
+function changeQty(name,val){
+let item = cart.find(i=>i.name===name);
+if(!item) return;
+
+item.qty += val;
+if(item.qty <= 0){
+cart = cart.filter(i=>i.name!==name);
 }
 
-/* QTY */
-function changeQty(i,val){
-cart[i].qty += val;
-
-if(cart[i].qty <= 0){
-cart.splice(i,1);
+update();
 }
 
-sync();
-}
+/* =========================
+   CART UI
+========================= */
 
-/* REMOVE */
-function removeItem(i){
-cart.splice(i,1);
-sync();
-}
-
-/* CART UI */
 function openCart(){
 document.getElementById("cart").classList.add("active");
 document.getElementById("overlay").classList.add("active");
-renderCart();
+update();
 }
 
 function closeCart(){
@@ -327,69 +313,77 @@ document.getElementById("cart").classList.remove("active");
 document.getElementById("overlay").classList.remove("active");
 }
 
-/* CHECKOUT */
+/* =========================
+   CHECKOUT
+========================= */
+
 function checkout(){
-let msg = "Order:%0A";
+let msg="Order:%0A";
 
 cart.forEach(i=>{
-msg += `${i.name} x${i.qty}%0A`;
+msg += `${i.name} - ${i.qty}kg = £${(i.price*i.qty).toFixed(2)}%0A`;
 });
 
 window.open("https://wa.me/447000000000?text="+msg);
 }
 
-/* POSTCODE CHECKER (FULLY RESTORED + WORKING) */
+/* =========================
+   POSTCODE CHECKER
+========================= */
+
 async function checkDelivery(){
 
-const pc = document.getElementById("postcode").value;
-const res = await fetch("https://api.postcodes.io/postcodes/" + pc);
-const data = await res.json();
+const pc=document.getElementById("postcode").value;
+const res=await fetch("https://api.postcodes.io/postcodes/"+pc);
+const data=await res.json();
 
-const out = document.getElementById("deliveryResult");
+const out=document.getElementById("deliveryResult");
 
 if(!data.result){
-out.innerText = "Invalid postcode";
-out.style.color = "red";
+out.innerText="Invalid postcode";
+out.style.color="red";
 return;
 }
 
-/* distance formula */
-function dist(lat1,lon1,lat2,lon2){
-const R = 3958.8;
-const dLat = (lat2-lat1) * Math.PI/180;
-const dLon = (lon2-lon1) * Math.PI/180;
+const shopLat=51.5433;
+const shopLng=-0.0077;
 
-const a =
+function dist(a,b,c,d){
+const R=3958.8;
+const dLat=(c-a)*Math.PI/180;
+const dLon=(d-b)*Math.PI/180;
+
+const x=
 Math.sin(dLat/2)**2 +
-Math.cos(lat1*Math.PI/180) *
-Math.cos(lat2*Math.PI/180) *
+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*
 Math.sin(dLon/2)**2;
 
-return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+return 2*R*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
 }
 
-const d = dist(
-shopLat,
-shopLng,
+const d=dist(
+shopLat,shopLng,
 data.result.latitude,
 data.result.longitude
 );
 
-if(d <= 2){
-out.innerText = "We deliver to your area (" + d.toFixed(2) + " miles)";
-out.style.color = "green";
-} else {
-out.innerText = "Sorry, outside delivery area (" + d.toFixed(2) + " miles)";
-out.style.color = "red";
+if(d<=2){
+out.innerText="We deliver to you ("+d.toFixed(2)+" miles)";
+out.style.color="green";
+}else{
+out.innerText="Outside delivery area ("+d.toFixed(2)+" miles)";
+out.style.color="red";
 }
 }
 
-/* INIT */
-renderProducts();
-renderCart();
+/* SAVE */
+function save(){
+localStorage.setItem("cart",JSON.stringify(cart));
+}
+
+update();
 
 </script>
 
 </body>
 </html>
-
