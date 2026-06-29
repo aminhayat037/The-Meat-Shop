@@ -9,69 +9,164 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
-body{margin:0;font-family:Poppins;background:#f6f4f1}
+:root{
+--black:#0e0e0e;
+--cream:#f6f4f1;
+--red:#8b0000;
+}
+
+body{
+margin:0;
+font-family:Poppins;
+background:var(--cream);
+color:#1a1a1a;
+overflow-x:hidden;
+}
+
+/* TOP BAR */
+.topbar{
+background:var(--black);
+color:white;
+display:flex;
+justify-content:space-between;
+padding:10px 20px;
+font-size:13px;
+letter-spacing:1px;
+}
+
+.topbar div{
+cursor:pointer;
+}
 
 /* HEADER */
 header{
 display:flex;
 justify-content:space-between;
-padding:20px 30px;
-background:white;
+align-items:center;
+padding:20px 40px;
+background:rgba(255,255,255,0.85);
+backdrop-filter:blur(10px);
 position:sticky;
 top:0;
 z-index:1000;
 }
 
-.logo{font-family:"Playfair Display";font-size:26px}
+.logo{
+font-family:"Playfair Display";
+font-size:28px;
+}
 
-.nav{display:flex;gap:20px;font-size:13px}
-.nav div{cursor:pointer;opacity:0.7}
+.nav{
+display:flex;
+gap:20px;
+font-size:13px;
+text-transform:uppercase;
+}
+
+.nav div{
+cursor:pointer;
+opacity:0.7;
+}
 .nav div:hover{opacity:1}
 
-/* CART */
-.cart-icon{position:relative;cursor:pointer}
-.cart-count{
-position:absolute;
-top:-8px;right:-10px;
-background:#8b0000;
+/* HERO */
+.hero{
+height:65vh;
+background:
+linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.55)),
+url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092') center/cover;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 color:white;
-border-radius:50%;
-padding:3px 7px;
-font-size:12px;
+text-align:center;
+}
+
+.hero h1{
+font-family:"Playfair Display";
+font-size:50px;
+margin:0;
 }
 
 /* PRODUCTS */
+.section-title{
+text-align:center;
+font-family:"Playfair Display";
+margin:50px 0 20px;
+font-size:30px;
+}
+
 .products{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-gap:20px;
-padding:30px;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+padding:40px 60px;
 }
 
 .product{
 background:white;
 border-radius:12px;
 overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+transition:0.3s;
 }
+
+.product:hover{transform:translateY(-6px)}
 
 .product img{
 width:100%;
-height:180px;
+height:200px;
 object-fit:cover;
 }
 
-.product-info{padding:15px}
+.product-info{
+padding:15px;
+}
 
+.product-info h3{
+font-family:"Playfair Display";
+margin:0;
+}
+
+.price{
+color:var(--red);
+margin:5px 0;
+}
+
+/* BUTTON */
 button{
-width:100%;
-padding:10px;
-background:black;
+background:var(--black);
 color:white;
 border:none;
+padding:12px;
+width:100%;
 cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:var(--red);
 }
 
 /* CART */
+.cart-icon{
+position:relative;
+cursor:pointer;
+}
+
+.cart-count{
+position:absolute;
+top:-8px;
+right:-10px;
+background:var(--red);
+color:white;
+border-radius:50%;
+padding:3px 7px;
+font-size:12px;
+}
+
+/* CART PANEL */
 .cart-panel{
 position:fixed;
 top:0;
@@ -79,29 +174,52 @@ right:-420px;
 width:360px;
 height:100%;
 background:white;
-transition:0.3s;
+box-shadow:-20px 0 40px rgba(0,0,0,0.2);
+transition:0.35s;
 padding:15px;
 z-index:2000;
-box-shadow:-10px 0 30px rgba(0,0,0,0.2);
 }
+
 .cart-panel.active{right:0}
 
 .overlay{
 position:fixed;
 top:0;left:0;
 width:100%;height:100%;
-background:rgba(0,0,0,0.4);
+background:rgba(0,0,0,0.5);
 display:none;
 z-index:1500;
 }
 .overlay.active{display:block}
 
-/* ACCOUNT PANEL */
-.account-panel{
+.cart-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin:10px 0;
+border-bottom:1px solid #eee;
+padding-bottom:8px;
+}
+
+.qty{
+display:flex;
+gap:8px;
+align-items:center;
+}
+
+.qty button{
+width:28px;
+height:28px;
+background:#eee;
+color:black;
+}
+
+/* ACCOUNT */
+.account{
 position:fixed;
-left:-380px;
+left:-360px;
 top:0;
-width:340px;
+width:320px;
 height:100%;
 background:white;
 transition:0.3s;
@@ -109,9 +227,16 @@ padding:15px;
 z-index:2000;
 box-shadow:10px 0 30px rgba(0,0,0,0.1);
 }
-.account-panel.active{left:0}
+.account.active{left:0}
 
-/* INPUTS */
+/* SECTIONS */
+.section{
+background:white;
+margin:20px;
+padding:25px;
+border-radius:10px;
+}
+
 input,select{
 width:100%;
 padding:10px;
@@ -119,11 +244,10 @@ margin:6px 0;
 border:1px solid #ddd;
 }
 
-/* DELIVERY */
-.section{
-padding:25px;
-background:white;
-margin:20px;
+.map iframe{
+width:100%;
+height:300px;
+border:0;
 border-radius:10px;
 }
 </style>
@@ -132,14 +256,34 @@ border-radius:10px;
 
 <body>
 
+<!-- TOP BAR -->
+
+<div class="topbar">
+<div>🟢 100% Halal • Fresh Meat • Open Daily</div>
+<div onclick="scrollTo('find')">📍 Find Us</div>
+</div>
+
+<!-- HEADER -->
+
 <header>
 <div class="logo">The Meat Shop</div>
 
 <div class="nav">
+<div onclick="scrollTo('products')">Shop</div>
+<div onclick="scrollTo('find')">Location</div>
 <div onclick="openAccount()">Account</div>
 <div onclick="openCart()">Cart 🛒 <span id="count">0</span></div>
 </div>
 </header>
+
+<!-- HERO -->
+
+<section class="hero">
+<h1>Premium Halal Butchery</h1>
+<p>Fresh cuts, locally sourced, delivered with care.</p>
+</section>
+
+<h2 class="section-title">Our Selection</h2>
 
 <!-- PRODUCTS -->
 
@@ -157,9 +301,9 @@ border-radius:10px;
 
 <select id="slot">
 <option value="">Select Delivery Slot</option>
-<option>Morning (8am–11am)</option>
-<option>Afternoon (12pm–3pm)</option>
-<option>Evening (4pm–7pm)</option>
+<option>Morning (8–11)</option>
+<option>Afternoon (12–3)</option>
+<option>Evening (4–7)</option>
 </select>
 
 <button onclick="checkout()">Checkout via WhatsApp</button>
@@ -168,35 +312,34 @@ border-radius:10px;
 
 <!-- ACCOUNT -->
 
-<div class="account-panel" id="account">
+<div class="account" id="account">
 <h3>Account</h3>
 
-<div id="authSection">
-<input id="loginName" placeholder="Name">
-<input id="loginEmail" placeholder="Email">
+<input id="name" placeholder="Name">
+<input id="email" placeholder="Email">
 
-<button onclick="login()">Login / Create Account</button>
+<button onclick="login()">Login</button>
 
+<p id="user"></p>
 </div>
 
-<p id="userInfo"></p>
+<!-- FIND US -->
+
+<section class="section" id="find">
+<h2 class="section-title">Find Us</h2>
+
+<p>Unit 5.1 Celebration Avenue, E20 1DB, London</p>
+
+<div class="map">
+<iframe src="https://www.google.com/maps?q=E20+1DB&output=embed"></iframe>
 </div>
-
-<!-- DELIVERY -->
-
-<section class="section">
-<h3>Delivery Check (2 Mile Radius)</h3>
-<input id="postcode" placeholder="Enter postcode">
-<button onclick="checkDelivery()">Check</button>
-<p id="deliveryResult"></p>
 </section>
 
 <script>
 
-const shopLat = 51.5433;
-const shopLng = -0.0077;
+const shopLat=51.5433;
+const shopLng=-0.0077;
 
-/* PRODUCTS */
 const products=[
 {name:"Beef Steak",price:12,img:"https://images.unsplash.com/photo-1600891964599-f61ba0e24092"},
 {name:"Chicken Breast",price:6,img:"https://images.unsplash.com/photo-1604908176997-43144d1dbe68"},
@@ -216,7 +359,7 @@ c.innerHTML+=`
 <img src="${p.img}">
 <div class="product-info">
 <h3>${p.name}</h3>
-<p>£${p.price}</p>
+<div class="price">£${p.price}</div>
 <button onclick="add('${p.name}',${p.price})">Add</button>
 </div>
 </div>`;
@@ -242,29 +385,26 @@ let total=0;
 
 cart.forEach(i=>{
 total+=i.price*i.qty;
-c.innerHTML+=`<p>${i.name} x${i.qty}</p>`;
+c.innerHTML+=`<div>${i.name} x${i.qty}</div>`;
 });
 
 document.getElementById("total").innerText=total;
 document.getElementById("count").innerText=cart.reduce((a,b)=>a+b.qty,0);
+
 save();
 }
 
 /* ACCOUNT */
 function login(){
-let name=document.getElementById("loginName").value;
-let email=document.getElementById("loginEmail").value;
+let n=document.getElementById("name").value;
+let e=document.getElementById("email").value;
 
-if(!name||!email)return;
-
-user={name,email};
+user={n,e};
 localStorage.setItem("user",JSON.stringify(user));
-
-document.getElementById("userInfo").innerText=
-"Logged in as "+name;
+document.getElementById("user").innerText="Logged in";
 }
 
-/* CART UI */
+/* UI */
 function openCart(){
 document.getElementById("cart").classList.add("active");
 document.getElementById("overlay").classList.add("active");
@@ -286,31 +426,21 @@ document.getElementById("overlay").classList.remove("active");
 function checkout(){
 
 let slot=document.getElementById("slot").value;
+if(!slot){alert("Select slot");return;}
 
-if(!slot){
-alert("Please select delivery slot");
-return;
-}
-
-if(!user){
-alert("Please login first");
-return;
-}
-
-let msg="Order from The Meat Shop:%0A";
+let msg="Order:%0A";
 
 cart.forEach(i=>{
 msg+=`${i.name} x${i.qty}%0A`;
 });
 
-msg+=`%0AName: ${user.name}%0ASlot: ${slot}`;
+msg+=`Slot: ${slot}`;
 
 window.open("https://wa.me/447000000000?text="+msg);
 }
 
-/* DELIVERY */
-function checkDelivery(){
-alert("Delivery check stays same logic (can upgrade next step)");
+function scrollTo(id){
+document.getElementById(id).scrollIntoView({behavior:"smooth"});
 }
 
 function save(){
