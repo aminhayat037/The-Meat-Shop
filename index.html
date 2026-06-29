@@ -9,59 +9,138 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-body {margin:0;font-family:'Poppins',sans-serif;background:#f8f8f8;}
-
-/* BANNER */
-.top-banner {background:linear-gradient(90deg,#8b0000,#ff2a2a);}
-.banner-track {color:white;padding:12px;text-align:center;font-weight:500;}
+body {margin:0;font-family:'Poppins',sans-serif;background:#f8f8f8;overflow-x:hidden;}
 
 /* HEADER */
-.main-header {text-align:center;background:white;padding:30px;}
-.logo {font-size:38px;font-weight:600;}
+.main-header {
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:white;
+padding:20px;
+position:sticky;
+top:0;
+z-index:1000;
+}
 
-.menu {display:flex;justify-content:center;gap:30px;list-style:none;padding:0;}
+.logo {font-size:28px;font-weight:600;}
+
+.menu {display:flex;gap:20px;list-style:none;}
 .menu li {cursor:pointer;}
 
-.dropdown-content {
-display:none;position:absolute;background:white;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
-border-radius:10px;
+.cart-icon {
+position:relative;
+cursor:pointer;
+font-size:22px;
 }
-.dropdown:hover .dropdown-content {display:block;}
-.dropdown-content li {padding:12px;}
 
-/* HERO */
-.hero {
-height:50vh;
-background:url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092') center/cover;
-display:flex;align-items:center;justify-content:center;
-color:white;font-size:40px;font-weight:600;
+.cart-count {
+position:absolute;
+top:-8px;
+right:-10px;
+background:red;
+color:white;
+border-radius:50%;
+padding:3px 7px;
+font-size:12px;
 }
 
 /* PRODUCTS */
 .products {
 padding:40px;
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:25px;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
 }
+
 .product {
-background:white;border-radius:15px;overflow:hidden;
-transition:0.3s;
+background:white;
+border-radius:15px;
+overflow:hidden;
 }
-.product:hover {transform:translateY(-8px);box-shadow:0 10px 25px rgba(0,0,0,0.1);}
-.product img {width:100%;height:200px;object-fit:cover;}
+
+.product img {
+width:100%;
+height:200px;
+object-fit:cover;
+}
+
 .product-info {padding:15px;}
 
 button {
-background:black;color:white;padding:10px;border:none;width:100%;cursor:pointer;
+background:black;
+color:white;
+padding:10px;
+border:none;
+cursor:pointer;
+width:100%;
 }
 
-/* SECTIONS */
-.section {background:white;margin:20px;padding:25px;border-radius:10px;}
+/* CART PANEL */
+.cart-panel {
+position:fixed;
+top:0;
+right:-420px;
+width:380px;
+height:100%;
+background:white;
+box-shadow:-5px 0 20px rgba(0,0,0,0.2);
+transition:0.4s;
+padding:20px;
+z-index:2000;
+}
 
-input, textarea, select {
-width:100%;padding:12px;margin-bottom:10px;border:1px solid #ddd;border-radius:5px;
+.cart-panel.active {right:0;}
+
+.overlay {
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.5);
+display:none;
+z-index:1500;
+}
+
+.overlay.active {display:block;}
+
+.close-btn {cursor:pointer;font-size:18px;margin-bottom:10px;}
+
+/* CART ITEM */
+.cart-item {
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:12px;
+padding:10px;
+border-bottom:1px solid #eee;
+}
+
+.qty-controls {
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.qty-controls button {
+width:30px;
+height:30px;
+border-radius:5px;
+}
+
+/* CHECKOUT */
+.section {
+background:white;
+margin:20px;
+padding:25px;
+border-radius:10px;
+}
+
+input {
+width:100%;
+padding:12px;
+margin-bottom:10px;
+border:1px solid #ddd;
+border-radius:5px;
 }
 
 </style>
@@ -70,42 +149,36 @@ width:100%;padding:12px;margin-bottom:10px;border:1px solid #ddd;border-radius:5
 
 <body>
 
-<div class="top-banner">
-<div class="banner-track">
-🚚 Fresh Halal Meat Delivered • East Village London • Order via WhatsApp
-</div>
-</div>
-
 <header class="main-header">
 <h1 class="logo">The Meat Shop</h1>
 
 <ul class="menu">
-<li class="dropdown">Shop ▼
-<ul class="dropdown-content">
-<li onclick="filterProducts('all')">All</li>
-<li onclick="filterProducts('beef')">Beef</li>
-<li onclick="filterProducts('chicken')">Chicken</li>
-<li onclick="filterProducts('lamb')">Lamb</li>
+<li onclick="scrollToSection('products')">Shop</li>
+<li onclick="scrollToSection('checkout')">Checkout</li>
 </ul>
-</li>
-<li onclick="scrollTo('cart')">Cart</li>
-<li onclick="scrollTo('checkout')">Checkout</li>
-<li onclick="scrollTo('account')">Account</li>
-</ul>
-</header>
 
-<section class="hero">Premium Halal Butcher</section>
+<div class="cart-icon" onclick="openCart()">
+🛒
+<div class="cart-count" id="cartCount">0</div>
+</div>
+</header>
 
 <section class="products" id="products"></section>
 
 <!-- CART -->
 
-<section class="section" id="cart">
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<div class="cart-panel" id="cartPanel">
+<div class="close-btn" onclick="closeCart()">✖ Close</div>
+
 <h2>Your Cart</h2>
 <div id="cartItems"></div>
 <h3>Total: £<span id="total">0</span></h3>
+
 <button onclick="sendWhatsApp()">Order via WhatsApp</button>
-</section>
+
+</div>
 
 <!-- CHECKOUT -->
 
@@ -113,99 +186,122 @@ width:100%;padding:12px;margin-bottom:10px;border:1px solid #ddd;border-radius:5
 <h2>Checkout</h2>
 <input id="name" placeholder="Full Name">
 <input id="address" placeholder="Address">
-<input id="postcode" placeholder="Postcode">
-<select id="payment">
-<option>Cash on Delivery</option>
-<option>Card on Collection</option>
-</select>
 <button onclick="placeOrder()">Place Order</button>
 <p id="orderStatus"></p>
 </section>
 
-<!-- ACCOUNT / INQUIRY -->
-
-<section class="section" id="account">
-<h2>Customer Inquiry / Account</h2>
-<input placeholder="Your Name">
-<input placeholder="Email">
-<textarea placeholder="Your message or inquiry"></textarea>
-<button onclick="alert('Inquiry sent! (demo)')">Submit</button>
-</section>
-
 <script>
 
-/* CHANGE THIS TO YOUR NUMBER */
-const whatsappNumber = "447000000000";
-
+/* PRODUCTS */
 const products = [
-{name:"Beef Steak",price:12,category:"beef",img:"https://images.unsplash.com/photo-1600891964599-f61ba0e24092"},
-{name:"Chicken Breast",price:6,category:"chicken",img:"https://images.unsplash.com/photo-1604908176997-43144d1dbe68"},
-{name:"Lamb Chops",price:10,category:"lamb",img:"https://images.unsplash.com/photo-1604908177522-429c8b3f4eb2"}
+{name:"Beef Steak",price:12,img:"https://images.unsplash.com/photo-1600891964599-f61ba0e24092"},
+{name:"Chicken Breast",price:6,img:"https://images.unsplash.com/photo-1604908176997-43144d1dbe68"},
+{name:"Lamb Chops",price:10,img:"https://images.unsplash.com/photo-1604908177522-429c8b3f4eb2"}
 ];
 
-let cart=[];
+/* CART (NOW WITH QUANTITY) */
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-function displayProducts(list){
+/* SAVE CART */
+function saveCart(){
+localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+/* DISPLAY PRODUCTS */
+function displayProducts(){
 let container=document.getElementById("products");
 container.innerHTML="";
-list.forEach(p=>{
+products.forEach(p=>{
 container.innerHTML+=`
 <div class="product">
 <img src="${p.img}">
 <div class="product-info">
 <h3>${p.name}</h3>
 <p>£${p.price}</p>
-<button onclick="addToCart('${p.name}',${p.price})">Add to Cart</button>
+<button onclick="addToCart('${p.name}',${p.price})">Add</button>
 </div>
 </div>`;
 });
 }
-displayProducts(products);
+displayProducts();
 
-function filterProducts(cat){
-if(cat==="all"){displayProducts(products);}
-else{displayProducts(products.filter(p=>p.category===cat));}
-}
-
+/* ADD TO CART (WITH QTY) */
 function addToCart(name,price){
-cart.push({name,price});
-renderCart();
+let item = cart.find(i=>i.name===name);
+
+if(item){
+item.qty += 1;
+}else{
+cart.push({name,price,qty:1});
 }
 
-function renderCart(){
+saveCart();
+updateCart();
+openCart();
+}
+
+/* UPDATE CART */
+function updateCart(){
 let container=document.getElementById("cartItems");
 container.innerHTML="";
 let total=0;
 
 cart.forEach((item,i)=>{
-total+=item.price;
+total += item.price * item.qty;
+
 container.innerHTML+=`
-<div>${item.name} - £${item.price}
-<button onclick="removeItem(${i})">X</button></div>`;
+<div class="cart-item">
+<div>
+<strong>${item.name}</strong><br>
+£${item.price}
+</div>
+
+<div class="qty-controls">
+<button onclick="changeQty(${i},-1)">-</button>
+<span>${item.qty}</span>
+<button onclick="changeQty(${i},1)">+</button>
+</div>
+</div>`;
 });
 
-document.getElementById("total").innerText=total;
+document.getElementById("total").innerText=total.toFixed(2);
+document.getElementById("cartCount").innerText=cart.reduce((a,b)=>a+b.qty,0);
+
+saveCart();
 }
 
-function removeItem(i){
+/* CHANGE QTY */
+function changeQty(i,amount){
+cart[i].qty += amount;
+
+if(cart[i].qty <= 0){
 cart.splice(i,1);
-renderCart();
 }
 
-/* WHATSAPP ORDER */
+updateCart();
+}
+
+/* CART PANEL */
+function openCart(){
+document.getElementById("cartPanel").classList.add("active");
+document.getElementById("overlay").classList.add("active");
+updateCart();
+}
+
+function closeCart(){
+document.getElementById("cartPanel").classList.remove("active");
+document.getElementById("overlay").classList.remove("active");
+}
+
+/* WHATSAPP */
 function sendWhatsApp(){
-if(cart.length===0){
-alert("Cart is empty");
-return;
-}
-
 let message="Order from The Meat Shop:%0A";
 
 cart.forEach(item=>{
-message+=`${item.name} - £${item.price}%0A`;
+message+=`${item.name} x${item.qty} - £${item.price * item.qty}%0A`;
 });
 
-window.open(`https://wa.me/${whatsappNumber}?text=${message}`);
+window.open("https://wa.me/447000000000?text="+message);
 }
 
 /* CHECKOUT */
@@ -214,17 +310,20 @@ let name=document.getElementById("name").value;
 let address=document.getElementById("address").value;
 
 if(!name || !address){
-document.getElementById("orderStatus").innerText="Please fill all fields";
+document.getElementById("orderStatus").innerText="Fill all fields";
 return;
 }
 
-document.getElementById("orderStatus").innerText="✅ Order placed (demo)";
+document.getElementById("orderStatus").innerText="Order placed!";
 }
 
 /* SCROLL */
-function scrollTo(id){
+function scrollToSection(id){
 document.getElementById(id).scrollIntoView({behavior:"smooth"});
 }
+
+/* LOAD CART ON START */
+updateCart();
 
 </script>
 
