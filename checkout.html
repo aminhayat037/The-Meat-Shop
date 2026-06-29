@@ -26,13 +26,12 @@ function submitOrder(e){
 
   const postcode = document.getElementById("postcode").value.toUpperCase();
 
-  if(!postcode.startsWith("E")){
+  if(postcode.startsWith("E15") || postcode.startsWith("E20") || postcode.startsWith("E13")){
+    localStorage.removeItem("cart");
+    document.getElementById("message").innerText = "✅ Order placed!";
+  } else {
     document.getElementById("message").innerText = "❌ Outside delivery radius";
-    return;
   }
-
-  localStorage.removeItem("cart");
-  document.getElementById("message").innerText = "✅ Order placed successfully!";
 }
 </script>
 
