@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -13,30 +12,32 @@ body{
 margin:0;
 font-family:Poppins;
 background:#f6f4f1;
+color:#111;
 }
 
-/* TOP BAR */
+/* NAVBAR */
 .topbar{
+position:sticky;
+top:0;
+z-index:1000;
 background:#0e0e0e;
 color:white;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:10px 20px;
+padding:12px 20px;
 font-size:13px;
 }
 
 .nav{
 display:flex;
 gap:18px;
-font-size:12px;
-text-transform:uppercase;
-letter-spacing:1px;
+align-items:center;
 }
 
 .nav span{
 cursor:pointer;
-opacity:0.8;
+opacity:0.85;
 transition:0.2s;
 }
 
@@ -46,14 +47,11 @@ opacity:1;
 
 /* HEADER */
 header{
+padding:20px 40px;
+background:white;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:20px 40px;
-background:white;
-position:sticky;
-top:0;
-z-index:1000;
 }
 
 .logo{
@@ -73,13 +71,14 @@ padding:30px;
 background:white;
 border-radius:10px;
 overflow:hidden;
-box-shadow:0 8px 20px rgba(0,0,0,0.06);
+box-shadow:0 6px 18px rgba(0,0,0,0.06);
 }
 
 .product img{
 width:100%;
 height:180px;
 object-fit:cover;
+background:#ddd;
 }
 
 .product-info{
@@ -88,6 +87,7 @@ padding:12px;
 
 .price{
 color:#8b0000;
+font-weight:500;
 }
 
 /* BUTTON */
@@ -108,12 +108,12 @@ background:#8b0000;
 .cart-panel{
 position:fixed;
 top:0;
-right:-420px;
-width:360px;
+right:-400px;
+width:340px;
 height:100%;
 background:white;
-transition:0.3s;
-box-shadow:-10px 0 30px rgba(0,0,0,0.2);
+transition:0.3s ease;
+box-shadow:-10px 0 25px rgba(0,0,0,0.2);
 padding:15px;
 z-index:2000;
 }
@@ -123,11 +123,13 @@ z-index:2000;
 .overlay{
 position:fixed;
 top:0;left:0;
-width:100%;height:100%;
+width:100%;
+height:100%;
 background:rgba(0,0,0,0.5);
 display:none;
 z-index:1500;
 }
+
 .overlay.active{display:block}
 
 .cart-item{
@@ -140,114 +142,95 @@ padding-bottom:8px;
 }
 
 .qty button{
-width:26px;
-height:26px;
+width:24px;
+height:24px;
 background:#eee;
 border:none;
 cursor:pointer;
 }
-
-/* SECTIONS */
-.section{
-margin:20px;
-padding:20px;
-background:white;
-border-radius:10px;
-}
 </style>
-
 </head>
 
 <body>
 
-<!-- TOP BAR (FIXED NAVIGATION) -->
-
+<!-- TOP NAV -->
 <div class="topbar">
 
 <div>🟢 The Meat Shop • 100% Halal Fresh Meat</div>
 
 <div class="nav">
-<span onclick="scrollToSection('home')">Home</span>
-<span onclick="scrollToSection('shop')">Shop</span>
-<span onclick="scrollToSection('find')">Location</span>
-<span onclick="scrollToSection('account')">Account</span>
+<span onclick="go('shop')">Shop</span>
+<span onclick="go('find')">Location</span>
+<span onclick="go('account')">Account</span>
 <span onclick="openCart()">Cart 🛒 (<span id="count">0</span>)</span>
 </div>
 
 </div>
 
 <!-- HEADER -->
-
-<header id="home">
+<header>
 <div class="logo">The Meat Shop</div>
 </header>
 
-<!-- PRODUCTS -->
-
+<!-- SHOP -->
 <section id="shop" class="products"></section>
 
 <!-- CART -->
-
 <div class="overlay" id="overlay" onclick="closeCart()"></div>
 
 <div class="cart-panel" id="cart">
 <h3>Your Cart</h3>
 <div id="cartItems"></div>
-
 <h3>Total: £<span id="total">0</span></h3>
-
 <button onclick="checkout()">Checkout via WhatsApp</button>
-
 </div>
 
-<!-- POSTCODE -->
-
-<section class="section">
-<h3>Check your postcode here to see if we deliver to your area</h3>
-<input id="postcode" placeholder="Enter postcode">
-<button onclick="checkDelivery()">Check</button>
-<p id="deliveryResult"></p>
-</section>
-
-<!-- FIND -->
-
-<section id="find" class="section">
+<!-- LOCATION -->
+<section id="find" style="margin:20px;padding:20px;background:white;border-radius:10px;">
 <h2>Location</h2>
-<p>Unit 5.1 Celebration Avenue, E20 1DB, London</p>
+<p>Unit 5.1 Celebration Avenue, E20 1DB</p>
 
-<iframe style="width:100%;height:300px;border:0;border-radius:10px;"
+<iframe style="width:100%;height:250px;border:0;border-radius:10px;"
 src="https://www.google.com/maps?q=E20+1DB&output=embed"></iframe>
 </section>
 
 <!-- ACCOUNT -->
-
-<section id="account" class="section">
+<section id="account" style="margin:20px;padding:20px;background:white;border-radius:10px;">
 <h2>Account</h2>
-<input placeholder="Name">
 <input placeholder="Email">
-<button>Login / Create Account</button>
+<input placeholder="Name">
+<button>Create / Login</button>
 </section>
 
 <script>
 
-/* PRODUCTS */
-const products=[
+/* PRODUCTS (WITH SAFE IMAGES) */
+const fallbackImg = "https://images.unsplash.com/photo-1604908177522-429c8b3f4eb2";
+
+const products = [
 {name:"Beef Steak",price:12.99,img:"https://images.unsplash.com/photo-1600891964599-f61ba0e24092"},
 {name:"Chicken Breast",price:6.99,img:"https://images.unsplash.com/photo-1604908176997-43144d1dbe68"},
 {name:"Lamb Chops",price:11.99,img:"https://images.unsplash.com/photo-1604908177522-429c8b3f4eb2"},
-{name:"Minced Beef",price:7.99,img:"https://images.unsplash.com/photo-1604908177000-2a0b3c4f4b11"}
+{name:"Minced Beef",price:7.99,img:""}, 
+{name:"Goat Meat",price:10.99,img:""},
+{name:"Marinated Chicken",price:8.99,img:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1"},
+{name:"Whole Chicken",price:5.99,img:""},
+{name:"Fish Fillet",price:9.99,img:"https://images.unsplash.com/photo-1544943910-4c1dc44aab44"}
 ];
 
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-/* RENDER */
+/* RENDER PRODUCTS */
 function render(){
-let c=document.getElementById("shop");
-c.innerHTML="";
+let box = document.getElementById("shop");
+box.innerHTML="";
+
 products.forEach(p=>{
-c.innerHTML+=`
+let img = p.img && p.img.trim() !== "" ? p.img : fallbackImg;
+
+box.innerHTML += `
 <div class="product">
-<img src="${p.img}">
+<img src="${img}" onerror="this.src='${fallbackImg}'">
 <div class="product-info">
 <h3>${p.name}</h3>
 <p class="price">£${p.price} / kg</p>
@@ -259,26 +242,33 @@ c.innerHTML+=`
 
 /* ADD */
 function add(name,price){
-let i=cart.find(x=>x.name===name);
-if(i)i.qty++;
-else cart.push({name,price,qty:1});
-save();update();openCart();
+let item = cart.find(i=>i.name===name);
+
+if(item){
+item.qty++;
+}else{
+cart.push({name,price,qty:1});
 }
 
-/* CART */
+save();
+update();
+openCart();
+}
+
+/* CART UPDATE */
 function update(){
-let c=document.getElementById("cartItems");
-c.innerHTML="";
+let box=document.getElementById("cartItems");
+box.innerHTML="";
 let total=0;
 
 cart.forEach(i=>{
-total+=i.price*i.qty;
+total += i.price * i.qty;
 
-c.innerHTML+=`
+box.innerHTML += `
 <div class="cart-item">
 <div><strong>${i.name}</strong></div>
 
-<div>
+<div class="qty">
 <button onclick="change('${i.name}',-1)">-</button>
 <span>${i.qty}</span>
 <button onclick="change('${i.name}',1)">+</button>
@@ -286,15 +276,22 @@ c.innerHTML+=`
 </div>`;
 });
 
-document.getElementById("total").innerText=total.toFixed(2);
-document.getElementById("count").innerText=cart.reduce((a,b)=>a+b.qty,0);
+document.getElementById("total").innerText = total.toFixed(2);
+document.getElementById("count").innerText = cart.reduce((a,b)=>a+b.qty,0);
+
 save();
 }
 
-function change(name,v){
-let i=cart.find(x=>x.name===name);
-i.qty+=v;
-if(i.qty<=0) cart=cart.filter(x=>x.name!==name);
+/* CHANGE QTY */
+function change(name,val){
+let item = cart.find(i=>i.name===name);
+if(!item) return;
+
+item.qty += val;
+if(item.qty<=0){
+cart = cart.filter(i=>i.name!==name);
+}
+
 update();
 }
 
@@ -310,18 +307,19 @@ document.getElementById("cart").classList.remove("active");
 document.getElementById("overlay").classList.remove("active");
 }
 
+/* NAV */
+function go(id){
+document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
 /* CHECKOUT */
 function checkout(){
 let msg="Order:%0A";
 cart.forEach(i=>{
-msg+=`${i.name} x${i.qty}%0A`;
+msg += `${i.name} x${i.qty}%0A`;
 });
-window.open("https://wa.me/447000000000?text="+msg);
-}
 
-/* NAV */
-function scrollToSection(id){
-document.getElementById(id).scrollIntoView({behavior:"smooth"});
+window.open("https://wa.me/447000000000?text="+msg);
 }
 
 /* SAVE */
@@ -329,7 +327,8 @@ function save(){
 localStorage.setItem("cart",JSON.stringify(cart));
 }
 
-render();update();
+render();
+update();
 
 </script>
 
